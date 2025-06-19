@@ -3,6 +3,12 @@
 use App\Http\Controllers\Auth\LoginController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\User\AlbumController;
+use App\Http\Controllers\User\ChatController;
+use App\Http\Controllers\User\EventController;
+use App\Http\Controllers\User\GiftsController;
+use App\Http\Controllers\User\MemberController;
+use App\Http\Controllers\User\StoreController;
 use Illuminate\Support\Facades\Auth;
 
 /*
@@ -25,12 +31,13 @@ Auth::routes();
 // Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 // Route::post('/custom-login', [LoginController::class, 'login'])->name('custom.login');
 
-Route::middleware(['auth', 'user-access:viewers'])->group(function () {
-
+Route::middleware(['auth'])->group(function () {
     Route::get('/home', [HomeController::class, 'index'])->name('home');
-});
-
-Route::middleware(['auth', 'user-access:parent'])->group(function () {
-
-    Route::get('/admin/home', [HomeController::class, 'adminHome'])->name('admin.home');
+    Route::post('add/member', [MemberController::class, 'store'])->name('add.member');
+    Route::get('/event', [EventController::class, 'index'])->name('event');
+    Route::post('/event', [EventController::class, 'store'])->name('create.event');
+    Route::get('/gifts', [GiftsController::class, 'index'])->name('gifts');
+    Route::get('/album', [AlbumController::class, 'index'])->name('album');
+    Route::get('/store', [StoreController::class, 'index'])->name('store');
+    Route::get('/chat', [ChatController::class, 'index'])->name('chat');
 });

@@ -3,10 +3,8 @@
 <head>
     <meta charset="utf-8" />
     <meta content="width=device-width, initial-scale=1.0" name="viewport" />
-    <title>Social Media Dashboard</title>
+    <title>Album</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="//unpkg.com/alpinejs" defer></script>
-
     <link
         href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
         rel="stylesheet" />
@@ -21,6 +19,7 @@
     <style>
         body,
         html {
+            /* font-family: "Open Sans", serif; */
             font-family: "Open Sans", sans-serif;
         }
 
@@ -40,6 +39,25 @@
             /* Ensures it appears above other elements */
             background: white;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        /* //////////////////    ///////////////////////////    ///////////////////////*/
+        /* Default image size for smaller screens */
+        /* #lightboxImage {
+        width: auto;
+        height: auto;
+        max-width: 100%;
+        max-height: 100%;
+        object-fit: contain;
+      } */
+
+        /* For large screens (lg: >= 1024px) */
+        @media (min-width: 1024px) {
+            #lightboxImage {
+                width: 842px;
+                height: 464px;
+                object-fit: cover;
+            }
         }
     </style>
 </head>
@@ -123,13 +141,12 @@
             <div class="hidden md:flex justify-center items-center xl:gap-20">
                 <ul
                     class="flex flex-wrap -mb-px text-sm font-medium text-center text-gray-500 dark:text-gray-400 border-gray-200 border-b xl:space-x-12">
-                    <!-- Home Tab (Active) -->
                     <li class="me-2">
                         <a
-                            href="Home.html"
-                            class="inline-flex items-center justify-center p-4 lg:pb-6 text-[#2C2C73] border-b-2 border-[#2C2C73] rounded-t-lg dark:text-[#2C2C73] dark:border-[#2C2C73] group active">
+                            href="{{route('home')}}"
+                            class="inline-flex items-center justify-center p-4 lg:pb-6 border-b-2 border-transparent rounded-t-lg hover:border-[#E3E3E3] group">
                             <img
-                                src="{{asset('assets/images//nav-home.svg')}}"
+                                src="Assets/images/nav-home-simple.svg"
                                 alt=""
                                 class="w-5 h-6 me-2" />
                         </a>
@@ -138,10 +155,10 @@
                     <!-- Other Tabs -->
                     <li class="me-2">
                         <a
-                            href="album.html"
-                            class="inline-flex items-center justify-center p-4 lg:pb-6 border-b-2 border-transparent rounded-t-lg hover:border-[#E3E3E3] group">
+                            href="{{route('album')}}"
+                            class="inline-flex items-center justify-center p-4 lg:pb-6 text-[#2C2C73] border-b-2 border-[#2C2C73] rounded-t-lg dark:text-[#2C2C73] dark:border-[#2C2C73] group active">
                             <img
-                                src="{{asset('assets/images/nav-slider.svg') }}"
+                                src="Assets/images/nav-slider-filled.svg"
                                 alt=""
                                 class="w-5 h-6 me-2" />
                         </a>
@@ -149,10 +166,10 @@
 
                     <li class="me-2">
                         <a
-                            href="event-detail.html"
+                            href="{{route('event')}}"
                             class="inline-flex items-center justify-center p-4 lg:pb-6 border-b-2 border-transparent rounded-t-lg hover:border-[#E3E3E3] group">
                             <img
-                                src="{{asset('assets/images/nav-emoji-happy.svg') }}"
+                                src="Assets/images/nav-emoji-happy.svg"
                                 alt=""
                                 class="w-5 h-6 me-2" />
                         </a>
@@ -160,18 +177,18 @@
 
                     <li class="me-2">
                         <a
-                            href="gifts.html"
+                            href="{{route('gifts')}}"
                             class="inline-flex items-center justify-center p-4 lg:pb-6 border-b-2 border-transparent rounded-t-lg hover:border-[#E3E3E3] group">
-                            <img src="{{asset('assets/images/nav4.svg') }}" alt="" class="w-5 h-6 me-2" />
+                            <img src="Assets/images/nav4.svg" alt="" class="w-5 h-6 me-2" />
                         </a>
                     </li>
 
                     <li class="me-2">
                         <a
-                            href="store.html"
+                            href="{{route('store') }}"
                             class="inline-flex items-center justify-center p-4 lg:pb-6 border-b-2 border-transparent rounded-t-lg hover:border-[#E3E3E3] group">
                             <img
-                                src="{{asset('assets/images/nav-5.svg')}}"
+                                src="Assets/images/nav-5.svg"
                                 alt=""
                                 class="w-5 h-6 me-2" />
                         </a>
@@ -180,58 +197,28 @@
                 <div class="flex items-center space-x-6">
                     <a href="chat.html">
                         <img
-                            src="{{asset('assets/images/nav-6.svg')}}"
-                            class="fas fa-comment-dots text-gray-500 text-xl hover:text-blue-500" /></a>
-
+                            src="Assets/images/nav-6.svg"
+                            class="fas fa-comment-dots text-gray-500 text-xl hover:text-blue-500" />
+                    </a>
                     <!-- Notification Component -->
-                    <div class="flex items-center space-x-4 relative">
-                        <!-- Notification Component -->
-                        <div x-data="{ notify: false }" class="relative">
-                            <img
-                                @click="notify = !notify"
-                                src="{{ asset('assets/images/nav-7.svg') }}"
-                                alt="Notification Icon"
-                                class="notification-icon cursor-pointer hover:text-blue-500" />
+                    <div class="relative notification-container">
+                        <img
+                            src="Assets/images/nav-7.svg"
+                            alt="Notification Icon"
+                            class="notification-icon cursor-pointer hover:text-blue-500" />
 
-                            <div
-                                x-show="notify"
-                                @click.away="notify = false"
-                                class="absolute right-0 mt-6 w-80 lg:w-[400px] bg-white shadow-lg rounded-sm p-3 z-40"
-                                x-cloak>
-                                <h2 class="text-[14px] font-[600] m-4 text-[#8D8D8D]">New</h2>
-                                <div class="notification-list space-y-3">
-                                    <!-- Sample Notification -->
-                                    <div class="p-2 bg-gray-100 rounded text-sm text-gray-700">You have a new message.</div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Profile with Logout Dropdown -->
-                        <div x-data="{ open: false }" class="relative">
-                            <button @click="open = !open" class="focus:outline-none">
-                                <img
-                                    src="{{ asset('assets/images/Ellipse 1201.svg') }}"
-                                    alt="User profile"
-                                    class="h-[32px] w-[32px] rounded-full" />
-                            </button>
-
-                            <div
-                                x-show="open"
-                                @click.away="open = false"
-                                class="absolute right-0 mt-10 w-32 bg-white border border-gray-200 rounded shadow-lg z-50"
-                                x-cloak>
-                                <form method="POST" action="{{ route('logout') }}">
-                                    @csrf
-                                    <button
-                                        type="submit"
-                                        class="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100">
-                                        Logout
-                                    </button>
-                                </form>
-                            </div>
+                        <div
+                            class="notification-box absolute right-0 mt-6 w-80 lg:w-[400px] bg-white shadow-lg rounded-sm p-3 hidden">
+                            <h2 class="text-[14px] font-[600] m-4 text-[#8D8D8D]">New</h2>
+                            <div class="notification-list space-y-3"></div>
                         </div>
                     </div>
+                    <!--  -->
 
+                    <a href="Profile.html"><img
+                            src="Assets/images/Ellipse 1201.svg"
+                            alt="User profile picture"
+                            class="h-[32px] w-[32px] rounded-full" /></a>
                 </div>
             </div>
 
@@ -296,39 +283,33 @@
                 <div class="flex flex-row items-center justify-center gap-4 pt-6">
                     <a href="Home.html">
                         <img
-                            src="{{asset('assets/images/nav-home.svg')}}"
+                            src="Assets/images/nav-home-simple.svg"
                             class="text-gray-500 text-xl hover:text-blue-500" />
                     </a>
-                    <a href="album.html">
-                        <img
-                            src="{{asset('assets/images/nav-slider.svg')}}"
-                            class="text-gray-500 text-xl hover:text-blue-500" />
-                    </a>
-                    <a href="event-detail.html">
-                        <img
-                            src="{{asset('assets/images/nav-emoji-happy.svg')}}"
-                            class="text-gray-500 text-xl hover:text-blue-500" />
-                    </a>
+                    <img
+                        src="Assets/images/nav-slider-filled.svg"
+                        class="text-gray-500 text-xl hover:text-blue-500" />
+                    <a href="event-detail.html"><img
+                            src="Assets/images/nav-emoji-happy.svg"
+                            class="text-gray-500 text-xl hover:text-blue-500" /></a>
                     <a href="gifts.html">
                         <img
-                            src="{{asset('assets/images/nav4.svg')}}"
+                            src="Assets/images/nav4.svg"
                             class="text-gray-500 text-xl hover:text-blue-500" />
                     </a>
-                    <a href="store.html">
+                    <a href="{{route('store')}}">
                         <img
-                            src="{{asset('assets/images/nav-5.svg')}}"
+                            src="Assets/images/nav-5.svg"
                             class="text-gray-500 text-xl hover:text-blue-500" />
                     </a>
                     <!--  -->
-                    <a href="chat.html">
-                        <img
-                            src="{{asset('assets/images/nav-6.svg')}}"
-                            class="text-gray-500 text-xl hover:text-blue-500" />
-                    </a>
+                    <a href="chat.html"><img
+                            src="Assets/images/nav-6.svg"
+                            class="text-gray-500 text-xl hover:text-blue-500" /></a>
                     <!-- Notification Component -->
                     <div class="relative notification-container">
                         <img
-                            src="{{asset('assets/images/nav-7.svg')}}"
+                            src="Assets/images/nav-7.svg"
                             alt="Notification Icon"
                             class="notification-icon cursor-pointer hover:text-blue-500" />
 
@@ -341,7 +322,7 @@
                     <!--  -->
                     <a href="Profile.html" class="">
                         <img
-                            src="{{asset('assets/images/Ellipse 1201.svg')}}"
+                            src="Assets/images/Ellipse 1201.svg"
                             alt="User profile picture"
                             class="h-10 w-10 rounded-full" />
                     </a>
@@ -350,7 +331,7 @@
         </div>
     </nav>
     <!-- ======= -->
-    <div class="flex flex-col md:flex-row mx-auto max-w-[1440px]">
+    <div class="flex flex-col md:flex-row max-w-[1440px] mx-auto">
         <!-- Sidebar -->
         <div
             class="w-full md:w-[180px] xl:w-[268px] bg-white p-4 mt-4 md:fixed md:z-30 md:h-screen md:top-[74px]">
@@ -360,12 +341,10 @@
                         alt="Profile Picture"
                         class="rounded-full w-[40px] h-[40px] mr-2"
                         height="40"
-                        src="{{asset('assets/images/Ellipse 1201.svg')}}
+                        src="Assets/images/Ellipse 1201.svg
               "
                         width="50" />
-                    <span class="text-lg font-semibold lg:font-bold text-[#2C2C73]">
-                        Profile
-                    </span>
+                    <span class="text-lg font-bold text-[#2C2C73]"> Profile </span>
                 </div>
             </a>
             <button
@@ -373,6 +352,1083 @@
                 class="w-full xl:w-[222px] h-[48px] font-semibold text-[13px] mx-auto py-2 px-4 border border-[#2C2C73] text-[#2C2C73] rounded-lg">
                 Add More
             </button>
+        </div>
+        <!-- main body -->
+        <div
+            class="w-full flex flex-col md:ml-[180px] xl:ml-[268px] lg:flex-row mainBody">
+            <!-- Main Content md:w-2/4 lg:w-[706px]-->
+            <div class="w-full lg:min-w-[706px] lg:h-[194px] p-4">
+                <!-- Create Post -->
+                <div class="bg-white p-4 mb-4">
+                    <span class="text-[#2C2C73] ml-auto text-[18px] font-bold">Create
+                    </span>
+
+                    <div
+                        class="flex space-x-2 mt-4 flex-col items-center justify-center gap-4 md:gap-1 md:flex-row md:items-start md:justify-start">
+                        <!-- ٓAdd Album -->
+                        <button
+                            id="openModalBtn"
+                            class="flex items-center space-x-2 py-2 px-3 bg-[#FFBB0033] rounded-md w-[194px] h-[40px]">
+                            <img src="Assets/images/gallery-add.svg" class="" />
+                            <span
+                                class="text-[#FFBB00] text-[13px] lg:font-semibold leading-[17.7px]">
+                                Create new album
+                            </span>
+                        </button>
+
+                        <!-- Add Photo -->
+                        <button
+                            id="openPhotosModalBtn"
+                            class="flex items-center space-x-2 py-2 px-2 bg-[#009DFF33] rounded-md w-[194px] h-[40px]">
+                            <img src="Assets/images/video-play.svg" class="" />
+                            <span
+                                class="text-[#009DFF] text-[13px] leading-[17.7px] lg:font-semibold">
+                                Add pictures to album
+                            </span>
+                        </button>
+                    </div>
+                    <!-- set advance chnage  -->
+                </div>
+                <!-- Example of switching between views -->
+                <div id="albumList" class="hidden">Album List Content</div>
+                <div id="sharedList" class="hidden">Shared Content</div>
+                <div id="albumGallery" class="hidden">Gallery Content</div>
+
+                <!-- Add ALBUMS -->
+                <div
+                    id="albumModal"
+                    class="fixed inset-0 bg-black bg-opacity-40 hidden justify-center items-center z-50 p-4">
+                    <div
+                        class="bg-[#FAFAFA] rounded-2xl w-full max-w-md p-8 relative lg:max-w-[577px]">
+                        <button
+                            id="closeModalBtn"
+                            class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 text-2xl">
+                            <!-- &times; -->
+                        </button>
+
+                        <h1
+                            class="text-[#2C2C73] font-semibold text-[24px] text-center mb-6">
+                            Add Album
+                        </h1>
+
+                        <form class="space-y-6 lg:w-[419px] mx-auto">
+                            <div>
+                                <label
+                                    for="name"
+                                    class="block mb-2 text-[#8D8D8D] text-[15px] font-semibold">Name</label>
+                                <input
+                                    id="name"
+                                    type="text"
+                                    class="w-full rounded-lg border border-[#E3E3E3] px-4 py-3 text-base text-[#2e2e6e] placeholder:text-[#a0a0a0] focus:outline-none focus:ring-2 focus:ring-[#8a8a8a]" />
+                            </div>
+                            <div>
+                                <label
+                                    for="photos"
+                                    class="block mb-2 text-[#8D8D8D] text-[15px] font-semibold">Add Photos</label>
+                                <button
+                                    type="button"
+                                    class="w-full bg-[#8B89D9] text-[#FFFFFF] text-[16px] font-semibold rounded-lg py-3">
+                                    Upload
+                                </button>
+                            </div>
+                            <div class="flex justify-between mt-6 gap-4">
+                                <button
+                                    type="button"
+                                    id="cancelBtn"
+                                    class="flex-1 border border-[#2C2C73] text-[#2C2C73] text-[16px] font-semibold rounded-lg py-3">
+                                    Cancel
+                                </button>
+                                <button
+                                    type="submit"
+                                    class="flex-1 bg-[#6FD997] text-[#FFFFFF] text-[16px] font-semibold rounded-lg py-3">
+                                    Add
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <!--  Add Photos Popup Modal -->
+                <div
+                    id="photosModal"
+                    class="fixed inset-0 bg-black bg-opacity-40 hidden justify-center items-center z-50 p-4">
+                    <div
+                        class="bg-gray-100 rounded-xl w-full max-w-md p-6 relative lg:max-w-[577px]">
+                        <button
+                            id="closePhotosModalBtn"
+                            class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 text-2xl">
+                            <!-- &times; -->
+                        </button>
+
+                        <h2
+                            class="text-[#2C2C73] font-semibold text-[24px] text-center mb-6">
+                            Add Photos
+                        </h2>
+
+                        <form class="space-y-4 lg:w-[419px] mx-auto">
+                            <div>
+                                <label
+                                    for="caption"
+                                    class="block mb-2 text-[#8D8D8D] text-[15px] font-semibold">Caption</label>
+                                <textarea
+                                    id="caption"
+                                    rows="5"
+                                    class="w-full rounded-lg border border-[#E3E3E3] text-gray-900 text-[14px] font-normal p-3 resize-none focus:outline-none focus:ring-2 focus:ring-indigo-400"></textarea>
+                            </div>
+                            <div>
+                                <label
+                                    for="photos"
+                                    class="block mb-2 text-[#8D8D8D] text-[15px] font-semibold">Add Photos</label>
+                                <button
+                                    type="button"
+                                    class="w-full bg-[#8B89D9] text-[#FFFFFF] text-[16px] font-semibold rounded-lg py-3">
+                                    Upload
+                                </button>
+                            </div>
+                            <div class="flex justify-between mt-6 gap-4">
+                                <button
+                                    type="button"
+                                    id="cancelBtnA"
+                                    class="flex-1 border border-[#2C2C73] text-[#2C2C73] text-[16px] font-semibold rounded-lg py-3">
+                                    Cancel
+                                </button>
+
+                                <button
+                                    type="submit"
+                                    class="flex-1 bg-[#6FD997] text-[#FFFFFF] text-[16px] font-semibold rounded-lg py-3">
+                                    Add
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <!-- Posts -->
+                <div class="bg-white mb-4 p-4">
+                    <div class="mx-auto">
+                        <div id="album-list">
+                            <h2 class="text-[16px] text-[#2C2C73] font-bold mb-4">
+                                Your Albums
+                            </h2>
+                            <div
+                                class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-[10px] mb-8">
+                                <!-- Album Item -->
+                                <!-- 1 -->
+                                <div
+                                    onclick="openAlbum()"
+                                    class="bg-white cursor-pointer overflow-hidden">
+                                    <img
+                                        alt="Album cover image of a person smiling"
+                                        class="w-full h-48 lg:w-[161px] lg:h-[115px] rounded-[4px] object-cover"
+                                        height="200"
+                                        src="Assets/images/gallery-1.svg"
+                                        width="161" />
+                                    <div class="p-1">
+                                        <h3 class="text-[15px] text-[#8B89D9]">Album Name</h3>
+                                        <p class="text-[#8D8D8D] text-[10px] lg:w-[161px]">
+                                            50 Images &nbsp; 50 Videos &nbsp; 50 Posts
+                                        </p>
+                                    </div>
+                                </div>
+                                <!-- Repeat Album Items -->
+                                <!-- 2 -->
+                                <div class="bg-white overflow-hidden">
+                                    <img
+                                        alt="Album cover image of a person with sunglasses"
+                                        class="w-full h-48 lg:w-[161px] lg:h-[115px] rounded-[4px] object-cover"
+                                        height=""
+                                        src="Assets/images/gallery-2.svg"
+                                        width="" />
+                                    <div class="p-1">
+                                        <h3 class="text-[15px] text-[#8B89D9]">Album Name</h3>
+                                        <p class="text-[#8D8D8D] text-[10px] lg:w-[161px]">
+                                            50 Images &nbsp; 50 Videos &nbsp; 50 Posts
+                                        </p>
+                                    </div>
+                                </div>
+                                <!-- 3 -->
+                                <div class="bg-white overflow-hidden">
+                                    <img
+                                        alt="Album cover image of a person with sunglasses"
+                                        class="w-full h-48 lg:w-[161px] lg:h-[115px] rounded-[4px] object-cover"
+                                        height=""
+                                        src="Assets/images/gallery-1.svg"
+                                        width="" />
+                                    <div class="p-1">
+                                        <h3 class="text-[15px] text-[#8B89D9]">Album Name</h3>
+                                        <p class="text-[#8D8D8D] text-[10px] lg:w-[161px]">
+                                            50 Images &nbsp; 50 Videos &nbsp; 50 Posts
+                                        </p>
+                                    </div>
+                                </div>
+                                <!-- 4 -->
+                                <div class="bg-white overflow-hidden">
+                                    <img
+                                        alt="Album cover image of a person with sunglasses"
+                                        class="w-full h-48 lg:w-[161px] lg:h-[115px] rounded-[4px] object-cover"
+                                        height=""
+                                        src="Assets/images/gallery-2.svg"
+                                        width="" />
+                                    <div class="p-1">
+                                        <h3 class="text-[15px] text-[#8B89D9]">Album Name</h3>
+                                        <p class="text-[#8D8D8D] text-[10px] lg:w-[161px]">
+                                            50 Images &nbsp; 50 Videos &nbsp; 50 Posts
+                                        </p>
+                                    </div>
+                                </div>
+                                <!-- 5 -->
+                                <div class="bg-white overflow-hidden">
+                                    <img
+                                        alt="Album cover image of a person smiling"
+                                        class="w-full h-48 lg:w-[161px] lg:h-[115px] rounded-[4px] object-cover"
+                                        height=""
+                                        src="Assets/images/gallery-3.svg"
+                                        width="" />
+                                    <div class="p-1">
+                                        <h3 class="text-[15px] text-[#8B89D9]">Album Name</h3>
+                                        <p class="text-[#8D8D8D] text-[10px] lg:w-[161px]">
+                                            50 Images &nbsp; 50 Videos &nbsp; 50 Posts
+                                        </p>
+                                    </div>
+                                </div>
+                                <!-- 6 -->
+                                <div class="bg-white overflow-hidden">
+                                    <img
+                                        alt="Album cover image of a person with sunglasses"
+                                        class="w-full h-48 lg:w-[161px] lg:h-[115px] rounded-[4px] object-cover"
+                                        height="200"
+                                        src="Assets/images/gallery-4.svg"
+                                        width="300" />
+                                    <div class="p-1">
+                                        <h3 class="text-[15px] text-[#8B89D9]">Album Name</h3>
+                                        <p class="text-[#8D8D8D] text-[10px] lg:w-[161px]">
+                                            50 Images &nbsp; 50 Videos &nbsp; 50 Posts
+                                        </p>
+                                    </div>
+                                </div>
+                                <!-- 7 -->
+                                <div class="bg-white overflow-hidden">
+                                    <img
+                                        alt="Album cover image of a person with sunglasses"
+                                        class="w-full h-48 lg:w-[161px] lg:h-[115px] rounded-[4px] object-cover"
+                                        height="200"
+                                        src="Assets/images/gallery-3.svg"
+                                        width="300" />
+                                    <div class="p-1">
+                                        <h3 class="text-[15px] text-[#8B89D9]">Album Name</h3>
+                                        <p class="text-[#8D8D8D] text-[10px] lg:w-[161px]">
+                                            50 Images &nbsp; 50 Videos &nbsp; 50 Posts
+                                        </p>
+                                    </div>
+                                </div>
+                                <!-- 8 -->
+                                <div class="bg-white overflow-hidden">
+                                    <img
+                                        alt="Album cover image of a person with sunglasses"
+                                        class="w-full h-48 lg:w-[161px] lg:h-[115px] rounded-[4px] object-cover"
+                                        height=""
+                                        src="Assets/images/gallery-4.svg"
+                                        width="" />
+                                    <div class="p-1">
+                                        <h3 class="text-[15px] text-[#8B89D9]">Album Name</h3>
+
+                                        <p class="text-[#8D8D8D] text-[10px] lg:w-[161px]">
+                                            50 Images &nbsp; 50 Videos &nbsp; 50 Posts
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="shared-list">
+                            <h2 class="text-[16px] font-semibold mb-4 text-[#8B89D9]">
+                                Shared Albums
+                            </h2>
+                            <div
+                                class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-[10px]">
+                                <!-- Shared Album Item -->
+                                <!-- 1 -->
+                                <div
+                                    onclick="openAlbum()"
+                                    class="bg-white overflow-hidden cursor-pointer">
+                                    <img
+                                        alt="Album cover image of a person smiling"
+                                        class="w-full h-48 lg:w-[161px] lg:h-[115px] rounded-[4px] object-cover"
+                                        height="200"
+                                        src="Assets/images/gallery-1.svg"
+                                        width="300" />
+                                    <div class="p-1">
+                                        <div class="flex flex-row justify-between">
+                                            <div>
+                                                <h3 class="text-[15px] text-[#8B89D9]">Album Name</h3>
+                                            </div>
+                                            <div class="flex items-center justify-center">
+                                                <img
+                                                    alt="Profile image of a person"
+                                                    class="w-[16px] h-[16px] rounded-full border-2 border-white -ml-2"
+                                                    height=""
+                                                    src="https://storage.googleapis.com/a1aa/image/lcONfmLvMux3xvZZEmqyEa4nPbduQlq0-FoW1pEUkNI.jpg"
+                                                    width="" />
+                                                <img
+                                                    alt="Profile image of a person"
+                                                    class="h-[16px] w-[16px] rounded-full border-2 border-white -ml-2"
+                                                    height="30"
+                                                    src="https://storage.googleapis.com/a1aa/image/lcONfmLvMux3xvZZEmqyEa4nPbduQlq0-FoW1pEUkNI.jpg"
+                                                    width="" />
+                                                <img
+                                                    alt="Profile image of a person"
+                                                    class="h-[16px] w-[16px] rounded-full border-2 border-white -ml-2"
+                                                    height="30"
+                                                    src="https://storage.googleapis.com/a1aa/image/lcONfmLvMux3xvZZEmqyEa4nPbduQlq0-FoW1pEUkNI.jpg"
+                                                    width="30" />
+                                                <img
+                                                    alt="Profile image of a person"
+                                                    class="h-[16px] w-[16px] rounded-full border-2 border-white -ml-2"
+                                                    height="30"
+                                                    src="https://storage.googleapis.com/a1aa/image/lcONfmLvMux3xvZZEmqyEa4nPbduQlq0-FoW1pEUkNI.jpg"
+                                                    width="30" />
+                                            </div>
+                                        </div>
+
+                                        <p class="text-[#8D8D8D] text-[10px] lg:w-[161px]">
+                                            50 Images &nbsp; 50 Videos &nbsp; 50 Posts
+                                        </p>
+                                    </div>
+                                </div>
+                                <!-- Repeat Shared Album Items -->
+                                <!-- 2 -->
+                                <div class="bg-white overflow-hidden">
+                                    <img
+                                        alt="Album cover image of a person smiling"
+                                        class="w-full h-48 lg:w-[161px] lg:h-[115px] rounded-[4px] object-cover"
+                                        height="200"
+                                        src="Assets/images/gallery-2.svg"
+                                        width="300" />
+                                    <div class="p-1">
+                                        <div class="flex flex-row justify-between">
+                                            <div>
+                                                <h3 class="text-[15px] text-[#8B89D9]">Album Name</h3>
+                                            </div>
+                                            <div class="flex items-center justify-center">
+                                                <img
+                                                    alt="Profile image of a person"
+                                                    class="w-[16px] h-[16px] rounded-full border-2 border-white -ml-2"
+                                                    height=""
+                                                    src="https://storage.googleapis.com/a1aa/image/lcONfmLvMux3xvZZEmqyEa4nPbduQlq0-FoW1pEUkNI.jpg"
+                                                    width="" />
+                                                <img
+                                                    alt="Profile image of a person"
+                                                    class="h-[16px] w-[16px] rounded-full border-2 border-white -ml-2"
+                                                    height="30"
+                                                    src="https://storage.googleapis.com/a1aa/image/lcONfmLvMux3xvZZEmqyEa4nPbduQlq0-FoW1pEUkNI.jpg"
+                                                    width="" />
+                                                <img
+                                                    alt="Profile image of a person"
+                                                    class="h-[16px] w-[16px] rounded-full border-2 border-white -ml-2"
+                                                    height="30"
+                                                    src="https://storage.googleapis.com/a1aa/image/lcONfmLvMux3xvZZEmqyEa4nPbduQlq0-FoW1pEUkNI.jpg"
+                                                    width="30" />
+                                                <img
+                                                    alt="Profile image of a person"
+                                                    class="h-[16px] w-[16px] rounded-full border-2 border-white -ml-2"
+                                                    height="30"
+                                                    src="https://storage.googleapis.com/a1aa/image/lcONfmLvMux3xvZZEmqyEa4nPbduQlq0-FoW1pEUkNI.jpg"
+                                                    width="30" />
+                                            </div>
+                                        </div>
+
+                                        <p class="text-[#8D8D8D] text-[10px] lg:w-[161px]">
+                                            50 Images &nbsp; 50 Videos &nbsp; 50 Posts
+                                        </p>
+                                    </div>
+                                </div>
+                                <!-- 3 -->
+                                <div class="bg-white overflow-hidden">
+                                    <img
+                                        alt="Album cover image of a person smiling"
+                                        class="w-full h-48 lg:w-[161px] lg:h-[115px] rounded-[4px] object-cover"
+                                        height="200"
+                                        src="Assets/images/gallery-1.svg"
+                                        width="300" />
+                                    <div class="p-1">
+                                        <div class="flex flex-row justify-between">
+                                            <div>
+                                                <h3 class="text-[15px] text-[#8B89D9]">Album Name</h3>
+                                            </div>
+                                            <div class="flex items-center justify-center">
+                                                <img
+                                                    alt="Profile image of a person"
+                                                    class="w-[16px] h-[16px] rounded-full border-2 border-white -ml-2"
+                                                    height=""
+                                                    src="https://storage.googleapis.com/a1aa/image/lcONfmLvMux3xvZZEmqyEa4nPbduQlq0-FoW1pEUkNI.jpg"
+                                                    width="" />
+                                                <img
+                                                    alt="Profile image of a person"
+                                                    class="h-[16px] w-[16px] rounded-full border-2 border-white -ml-2"
+                                                    height="30"
+                                                    src="https://storage.googleapis.com/a1aa/image/lcONfmLvMux3xvZZEmqyEa4nPbduQlq0-FoW1pEUkNI.jpg"
+                                                    width="" />
+                                                <img
+                                                    alt="Profile image of a person"
+                                                    class="h-[16px] w-[16px] rounded-full border-2 border-white -ml-2"
+                                                    height="30"
+                                                    src="https://storage.googleapis.com/a1aa/image/lcONfmLvMux3xvZZEmqyEa4nPbduQlq0-FoW1pEUkNI.jpg"
+                                                    width="30" />
+                                                <img
+                                                    alt="Profile image of a person"
+                                                    class="h-[16px] w-[16px] rounded-full border-2 border-white -ml-2"
+                                                    height="30"
+                                                    src="https://storage.googleapis.com/a1aa/image/lcONfmLvMux3xvZZEmqyEa4nPbduQlq0-FoW1pEUkNI.jpg"
+                                                    width="30" />
+                                            </div>
+                                        </div>
+
+                                        <p class="text-[#8D8D8D] text-[10px] lg:w-[161px]">
+                                            50 Images &nbsp; 50 Videos &nbsp; 50 Posts
+                                        </p>
+                                    </div>
+                                </div>
+                                <!-- 4 -->
+                                <div class="bg-white overflow-hidden">
+                                    <img
+                                        alt="Album cover image of a person smiling"
+                                        class="w-full h-48 lg:w-[161px] lg:h-[115px] rounded-[4px] object-cover"
+                                        height="200"
+                                        src="Assets/images/gallery-2.svg"
+                                        width="300" />
+                                    <div class="p-1">
+                                        <div class="flex flex-row justify-between">
+                                            <div>
+                                                <h3 class="text-[15px] text-[#8B89D9]">Album Name</h3>
+                                            </div>
+                                            <div class="flex items-center justify-center">
+                                                <img
+                                                    alt="Profile image of a person"
+                                                    class="w-[16px] h-[16px] rounded-full border-2 border-white -ml-2"
+                                                    height=""
+                                                    src="https://storage.googleapis.com/a1aa/image/lcONfmLvMux3xvZZEmqyEa4nPbduQlq0-FoW1pEUkNI.jpg"
+                                                    width="" />
+                                                <img
+                                                    alt="Profile image of a person"
+                                                    class="h-[16px] w-[16px] rounded-full border-2 border-white -ml-2"
+                                                    height="30"
+                                                    src="https://storage.googleapis.com/a1aa/image/lcONfmLvMux3xvZZEmqyEa4nPbduQlq0-FoW1pEUkNI.jpg"
+                                                    width="" />
+                                                <img
+                                                    alt="Profile image of a person"
+                                                    class="h-[16px] w-[16px] rounded-full border-2 border-white -ml-2"
+                                                    height="30"
+                                                    src="https://storage.googleapis.com/a1aa/image/lcONfmLvMux3xvZZEmqyEa4nPbduQlq0-FoW1pEUkNI.jpg"
+                                                    width="30" />
+                                                <img
+                                                    alt="Profile image of a person"
+                                                    class="h-[16px] w-[16px] rounded-full border-2 border-white -ml-2"
+                                                    height="30"
+                                                    src="https://storage.googleapis.com/a1aa/image/lcONfmLvMux3xvZZEmqyEa4nPbduQlq0-FoW1pEUkNI.jpg"
+                                                    width="30" />
+                                            </div>
+                                        </div>
+
+                                        <p class="text-[#8D8D8D] text-[10px] lg:w-[161px]">
+                                            50 Images &nbsp; 50 Videos &nbsp; 50 Posts
+                                        </p>
+                                    </div>
+                                </div>
+                                <!-- 5 -->
+                                <div class="bg-white overflow-hidden">
+                                    <img
+                                        alt="Album cover image of a person smiling"
+                                        class="w-full h-48 lg:w-[161px] lg:h-[115px] rounded-[4px] object-cover"
+                                        height="200"
+                                        src="Assets/images/gallery-3.svg"
+                                        width="300" />
+                                    <div class="p-1">
+                                        <div class="flex flex-row justify-between">
+                                            <div>
+                                                <h3 class="text-[15px] text-[#8B89D9]">Album Name</h3>
+                                            </div>
+                                            <div class="flex items-center justify-center">
+                                                <img
+                                                    alt="Profile image of a person"
+                                                    class="w-[16px] h-[16px] rounded-full border-2 border-white -ml-2"
+                                                    height=""
+                                                    src="https://storage.googleapis.com/a1aa/image/lcONfmLvMux3xvZZEmqyEa4nPbduQlq0-FoW1pEUkNI.jpg"
+                                                    width="" />
+                                                <img
+                                                    alt="Profile image of a person"
+                                                    class="h-[16px] w-[16px] rounded-full border-2 border-white -ml-2"
+                                                    height="30"
+                                                    src="https://storage.googleapis.com/a1aa/image/lcONfmLvMux3xvZZEmqyEa4nPbduQlq0-FoW1pEUkNI.jpg"
+                                                    width="" />
+                                                <img
+                                                    alt="Profile image of a person"
+                                                    class="h-[16px] w-[16px] rounded-full border-2 border-white -ml-2"
+                                                    height="30"
+                                                    src="https://storage.googleapis.com/a1aa/image/lcONfmLvMux3xvZZEmqyEa4nPbduQlq0-FoW1pEUkNI.jpg"
+                                                    width="30" />
+                                                <img
+                                                    alt="Profile image of a person"
+                                                    class="h-[16px] w-[16px] rounded-full border-2 border-white -ml-2"
+                                                    height="30"
+                                                    src="https://storage.googleapis.com/a1aa/image/lcONfmLvMux3xvZZEmqyEa4nPbduQlq0-FoW1pEUkNI.jpg"
+                                                    width="30" />
+                                            </div>
+                                        </div>
+
+                                        <p class="text-[#8D8D8D] text-[10px] lg:w-[161px]">
+                                            50 Images &nbsp; 50 Videos &nbsp; 50 Posts
+                                        </p>
+                                    </div>
+                                </div>
+                                <!-- 6 -->
+                                <div class="bg-white overflow-hidden">
+                                    <img
+                                        alt="Album cover image of a person smiling"
+                                        class="w-full h-48 lg:w-[161px] lg:h-[115px] rounded-[4px] object-cover"
+                                        height="200"
+                                        src="Assets/images/gallery-4.svg"
+                                        width="300" />
+                                    <div class="p-1">
+                                        <div class="flex flex-row justify-between">
+                                            <div>
+                                                <h3 class="text-[15px] text-[#8B89D9]">Album Name</h3>
+                                            </div>
+                                            <div class="flex items-center justify-center">
+                                                <img
+                                                    alt="Profile image of a person"
+                                                    class="w-[16px] h-[16px] rounded-full border-2 border-white -ml-2"
+                                                    height=""
+                                                    src="https://storage.googleapis.com/a1aa/image/lcONfmLvMux3xvZZEmqyEa4nPbduQlq0-FoW1pEUkNI.jpg"
+                                                    width="" />
+                                                <img
+                                                    alt="Profile image of a person"
+                                                    class="h-[16px] w-[16px] rounded-full border-2 border-white -ml-2"
+                                                    height="30"
+                                                    src="https://storage.googleapis.com/a1aa/image/lcONfmLvMux3xvZZEmqyEa4nPbduQlq0-FoW1pEUkNI.jpg"
+                                                    width="" />
+                                                <img
+                                                    alt="Profile image of a person"
+                                                    class="h-[16px] w-[16px] rounded-full border-2 border-white -ml-2"
+                                                    height="30"
+                                                    src="https://storage.googleapis.com/a1aa/image/lcONfmLvMux3xvZZEmqyEa4nPbduQlq0-FoW1pEUkNI.jpg"
+                                                    width="30" />
+                                                <img
+                                                    alt="Profile image of a person"
+                                                    class="h-[16px] w-[16px] rounded-full border-2 border-white -ml-2"
+                                                    height="30"
+                                                    src="https://storage.googleapis.com/a1aa/image/lcONfmLvMux3xvZZEmqyEa4nPbduQlq0-FoW1pEUkNI.jpg"
+                                                    width="30" />
+                                            </div>
+                                        </div>
+
+                                        <p class="text-[#8D8D8D] text-[10px] lg:w-[161px]">
+                                            50 Images &nbsp; 50 Videos &nbsp; 50 Posts
+                                        </p>
+                                    </div>
+                                </div>
+                                <!-- 7 -->
+                                <div class="bg-white overflow-hidden">
+                                    <img
+                                        alt="Album cover image of a person smiling"
+                                        class="w-full h-48 lg:w-[161px] lg:h-[115px] rounded-[4px] object-cover"
+                                        height="200"
+                                        src="Assets/images/gallery-3.svg"
+                                        width="300" />
+                                    <div class="p-1">
+                                        <div class="flex flex-row justify-between">
+                                            <div>
+                                                <h3 class="text-[15px] text-[#8B89D9]">Album Name</h3>
+                                            </div>
+                                            <div class="flex items-center justify-center">
+                                                <img
+                                                    alt="Profile image of a person"
+                                                    class="w-[16px] h-[16px] rounded-full border-2 border-white -ml-2"
+                                                    height=""
+                                                    src="https://storage.googleapis.com/a1aa/image/lcONfmLvMux3xvZZEmqyEa4nPbduQlq0-FoW1pEUkNI.jpg"
+                                                    width="" />
+                                                <img
+                                                    alt="Profile image of a person"
+                                                    class="h-[16px] w-[16px] rounded-full border-2 border-white -ml-2"
+                                                    height="30"
+                                                    src="https://storage.googleapis.com/a1aa/image/lcONfmLvMux3xvZZEmqyEa4nPbduQlq0-FoW1pEUkNI.jpg"
+                                                    width="" />
+                                                <img
+                                                    alt="Profile image of a person"
+                                                    class="h-[16px] w-[16px] rounded-full border-2 border-white -ml-2"
+                                                    height="30"
+                                                    src="https://storage.googleapis.com/a1aa/image/lcONfmLvMux3xvZZEmqyEa4nPbduQlq0-FoW1pEUkNI.jpg"
+                                                    width="30" />
+                                                <img
+                                                    alt="Profile image of a person"
+                                                    class="h-[16px] w-[16px] rounded-full border-2 border-white -ml-2"
+                                                    height="30"
+                                                    src="https://storage.googleapis.com/a1aa/image/lcONfmLvMux3xvZZEmqyEa4nPbduQlq0-FoW1pEUkNI.jpg"
+                                                    width="30" />
+                                            </div>
+                                        </div>
+
+                                        <p class="text-[#8D8D8D] text-[10px] lg:w-[161px]">
+                                            50 Images &nbsp; 50 Videos &nbsp; 50 Posts
+                                        </p>
+                                    </div>
+                                </div>
+                                <!-- 8 -->
+                                <div class="bg-white overflow-hidden">
+                                    <img
+                                        alt="Album cover image of a person smiling"
+                                        class="w-full h-48 lg:w-[161px] lg:h-[115px] rounded-[4px] object-cover"
+                                        height="200"
+                                        src="Assets/images/gallery-4.svg"
+                                        width="300" />
+                                    <div class="p-1">
+                                        <div class="flex flex-row justify-between">
+                                            <div>
+                                                <h3 class="text-[15px] text-[#8B89D9]">Album Name</h3>
+                                            </div>
+                                            <div class="flex items-center justify-center">
+                                                <img
+                                                    alt="Profile image of a person"
+                                                    class="w-[16px] h-[16px] rounded-full border-2 border-white -ml-2"
+                                                    height=""
+                                                    src="https://storage.googleapis.com/a1aa/image/lcONfmLvMux3xvZZEmqyEa4nPbduQlq0-FoW1pEUkNI.jpg"
+                                                    width="" />
+                                                <img
+                                                    alt="Profile image of a person"
+                                                    class="h-[16px] w-[16px] rounded-full border-2 border-white -ml-2"
+                                                    height="30"
+                                                    src="https://storage.googleapis.com/a1aa/image/lcONfmLvMux3xvZZEmqyEa4nPbduQlq0-FoW1pEUkNI.jpg"
+                                                    width="" />
+                                                <img
+                                                    alt="Profile image of a person"
+                                                    class="h-[16px] w-[16px] rounded-full border-2 border-white -ml-2"
+                                                    height="30"
+                                                    src="https://storage.googleapis.com/a1aa/image/lcONfmLvMux3xvZZEmqyEa4nPbduQlq0-FoW1pEUkNI.jpg"
+                                                    width="30" />
+                                                <img
+                                                    alt="Profile image of a person"
+                                                    class="h-[16px] w-[16px] rounded-full border-2 border-white -ml-2"
+                                                    height="30"
+                                                    src="https://storage.googleapis.com/a1aa/image/lcONfmLvMux3xvZZEmqyEa4nPbduQlq0-FoW1pEUkNI.jpg"
+                                                    width="30" />
+                                            </div>
+                                        </div>
+
+                                        <p class="text-[#8D8D8D] text-[10px] lg:w-[161px]">
+                                            50 Images &nbsp; 50 Videos &nbsp; 50 Posts
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- hjkhjkhjkhjkhjkhjkhjkhjkhjkhkjhkjhkj -->
+                    <!-- Album Gallery View -->
+                    <div id="album-gallery" class="hidden bg-white mb-4 text-gray-800">
+                        <div class="max-w-[706px] mx-auto p-4">
+                            <div class="flex flex-row space-x-2 mb-4">
+                                <button
+                                    onclick="goBack()"
+                                    class="text-[#2C2C73] text-[16px] font-semibold gap-2 flex flex-row">
+                                    <span>
+                                        <img
+                                            src="Assets/images/arrow-left.svg"
+                                            alt=""
+                                            srcset="" />
+                                    </span>
+                                    <span class="text-[16px]">Albums Name</span>
+                                </button>
+                            </div>
+
+                            <div
+                                class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 sm:gap-3 md:gap-4">
+                                <!-- Image Thumbnails -->
+                                <img
+                                    loading="lazy"
+                                    src="Assets/images/album 1.svg"
+                                    onclick="openLightbox(0)"
+                                    class="gallery-img w-full aspect-[4/3] lg:h-[156px] rounded-lg object-cover cursor-pointer" />
+                                <img
+                                    loading="lazy"
+                                    src="Assets/images/album 2.svg"
+                                    onclick="openLightbox(1)"
+                                    class="gallery-img w-full aspect-[4/3] lg:h-[156px] rounded-lg object-cover cursor-pointer" />
+                                <img
+                                    loading="lazy"
+                                    src="Assets/images/album 3.svg"
+                                    onclick="openLightbox(2)"
+                                    class="gallery-img w-full aspect-[4/3] lg:h-[156px] rounded-lg object-cover cursor-pointer" />
+                                <img
+                                    loading="lazy"
+                                    src="Assets/images/album 5(2).svg"
+                                    onclick="openLightbox(3)"
+                                    class="gallery-img w-full aspect-[3/4] lg:h-[322px] sm:row-span-2 rounded-lg object-cover cursor-pointer" />
+                                <img
+                                    loading="lazy"
+                                    src="Assets/images/album 4.svg"
+                                    onclick="openLightbox(4)"
+                                    class="gallery-img w-full aspect-[16/9] lg:h-[156px] sm:col-span-2 md:col-span-3 rounded-lg object-cover cursor-pointer" />
+                                <img
+                                    loading="lazy"
+                                    src="Assets/images/album 6.svg"
+                                    onclick="openLightbox(5)"
+                                    class="gallery-img w-full aspect-[4/3] lg:h-[156px] rounded-lg object-cover cursor-pointer" />
+                                <img
+                                    loading="lazy"
+                                    src="Assets/images/album 7.svg"
+                                    onclick="openLightbox(6)"
+                                    class="gallery-img w-full aspect-[4/3] lg:h-[156px] rounded-lg object-cover cursor-pointer" />
+                                <img
+                                    loading="lazy"
+                                    src="Assets/images/album 8.svg"
+                                    onclick="openLightbox(7)"
+                                    class="gallery-img w-full aspect-[4/3] lg:h-[156px] rounded-lg object-cover cursor-pointer" />
+                                <img
+                                    loading="lazy"
+                                    src="Assets/images/album 9.svg"
+                                    onclick="openLightbox(8)"
+                                    class="gallery-img w-full aspect-[4/3] lg:h-[156px] rounded-lg object-cover cursor-pointer" />
+                                <img
+                                    loading="lazy"
+                                    src="Assets/images/album 10.svg"
+                                    onclick="openLightbox(9)"
+                                    class="gallery-img w-full aspect-[4/3] lg:h-[156px] rounded-lg object-cover cursor-pointer" />
+                                <img
+                                    loading="lazy"
+                                    src="Assets/images/album 11.svg"
+                                    onclick="openLightbox(10)"
+                                    class="gallery-img w-full aspect-[16/9] lg:h-[156px] sm:col-span-2 md:col-span-3 rounded-lg object-cover cursor-pointer" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Lightbox Modal -->
+                    <div
+                        id="lightbox"
+                        class="fixed inset-0 bg-black bg-opacity-60 flex flex-col justify-center items-center z-50 hidden opacity-0 transition-opacity duration-300">
+                        <div class="relative w-full h-[460px] lg:w-[864px] lg:h-[464px]">
+                            <button
+                                id="closeLightbox"
+                                class="absolute top-0 lg:-top-[11%] xl:-top-[9%] right-0 lg:-right-[4%] text-white text-3xl z-50">
+                                <!-- &times; -->
+                                <img
+                                    src="Assets/images/close-circle.svg"
+                                    alt=""
+                                    srcset=""
+                                    class="max-w-[36px] lg:max-w-[36px]" />
+                            </button>
+                            <img
+                                id="lightboxImage"
+                                src=""
+                                class="h-full w-full object-cover rounded-xl shadow-lg overflow-hidden transition-opacity duration-300" />
+
+                            <div
+                                id="captionBox"
+                                class="relative -mt-24 border-t border-black/10 absolute rounded-xl backdrop-blur-sm bg-black/10 w-full h-[97px] lg:w-[842px] lg:pb-[19px] pt-4">
+                                <span id="imageCaption" class="text-white text-sm lg:pl-4">Image caption goes here</span>
+                                <button
+                                    onclick="closeCaption()"
+                                    class="absolute top-1 right-2 text-white text-xl">
+                                    <!-- &times; -->
+                                    <img
+                                        src="Assets/images/close-circle.svg"
+                                        alt=""
+                                        srcset=""
+                                        class="max-w-[20px] lg:max-w-[30px]" />
+                                </button>
+                            </div>
+                            <div
+                                class="flex mt-4 gap-2 overflow-x-auto max-w-full px-4"
+                                id="thumbnailContainer"></div>
+                            <div
+                                class="absolute left-2 lg:-left-[8%] top-1/2 transform -translate-y-1/2 cursor-pointer z-50 max-w-[30px] lg:max-w-[50px]"
+                                onclick="prevImage()">
+                                <!-- &#10094; -->
+                                <img src="Assets/images/blue arrow left.svg" alt="" />
+                            </div>
+                            <div
+                                class="absolute right-2 lg:-right-[5%] top-1/2 transform -translate-y-1/2 cursor-pointer z-50 max-w-[30px] lg:max-w-[50px]"
+                                onclick="nextImage()">
+                                <!-- &#10095; -->
+                                <img src="Assets/images/blue arrow right.svg" alt="" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Modal -->
+                    <div
+                        id="modal"
+                        class="fixed inset-0 hidden items-center justify-center z-50 modal">
+                        <div class="relative max-w-3xl mx-auto">
+                            <img id="modal-img" src="" class="max-h-[80vh] rounded-lg" />
+                            <button
+                                onclick="closeModal()"
+                                class="absolute top-2 right-2 text-white text-2xl">
+                                ✕
+                            </button>
+                        </div>
+                    </div>
+                    <!-- ghfghghjgkjhhjfddsgffjvcghdgfhjkjkj -->
+                </div>
+            </div>
+            <!-- Right Sidebar md:w-1/4 xl:max-w-[408px]-->
+            <div class="w-full xl:max-w-[408px] p-4 md:pl-0">
+                <!-- Upcoming Event -->
+                <div class="bg-white p-4 mb-4">
+                    <div class="flex justify-between items-center mb-4">
+                        <span class="font-bold text-lg text-[#2C2C73]">
+                            Upcoming Event
+                        </span>
+                        <a class="text-[#8D8D8D] text-[13px]" href="#"> See All </a>
+                    </div>
+                    <img
+                        alt="Event Image"
+                        class="w-full rounded-lg mb-2"
+                        height="150"
+                        src="Assets/images/Rectangle 110662.svg"
+                        width="300" />
+                    <div class="flex flex-row gap-2 items-center pt-2">
+                        <div
+                            class="flex flex-col items-center py-1 px-2 rounded-lg shadow-md w-[40px] h-[40px]">
+                            <span class="text-gray-600 text-[14px] font-bold"> 17 </span>
+                            <span class="text-[10px]">Jun</span>
+                        </div>
+                        <div class="flex flex-col">
+                            <p class="font-semibold text-[13px] text-[#8D8D8D]">
+                                Event Name
+                            </p>
+                            <p class="text-[#8D8D8D] text-[13px]">Location</p>
+                        </div>
+                    </div>
+                </div>
+                <!-- My Tasks -->
+                <div class="bg-white p-4 mb-4">
+                    <span class="font-bold text-[#2C2C73] text-[15px]"> My Tasks </span>
+                    <div class="mt-2">
+                        <span class="text-[#8B89D9] text-[12px] pt-1">08:00 AM - 09:00 AM</span>
+                        <div
+                            class="flex items-center mb-2 bg-[#FAFAFA] border border-[#E3E3E3] pl-2 py-2 rounded-xl">
+                            <div
+                                class="bg-[#70D997] w-[50px] h-[48px] flex flex-col items-center text-green-600 rounded-lg p-2"
+                                style="font-family: Poppins, sans-serif">
+                                <span class="text-[14px] font-bold text-[#FFFFFFD4]">
+                                    17
+                                </span>
+                                <span class="text-[10px] text-[#FFFFFFD4]">Jun</span>
+                            </div>
+                            <span class="px-3">
+                                <svg
+                                    width="5"
+                                    height="26"
+                                    viewBox="0 0 5 26"
+                                    fill="none"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <rect
+                                        x="1.57812"
+                                        y="2.36377"
+                                        width="1.57576"
+                                        height="23.6364"
+                                        rx="0.787879"
+                                        fill="url(#paint0_linear_6232_3649)"
+                                        fill-opacity="0.7" />
+                                    <circle
+                                        cx="2.36364"
+                                        cy="2.36364"
+                                        r="2.36364"
+                                        fill="#2C2C73" />
+                                    <defs>
+                                        <linearGradient
+                                            id="paint0_linear_6232_3649"
+                                            x1="2.366"
+                                            y1="2.36377"
+                                            x2="2.366"
+                                            y2="26.0001"
+                                            gradientUnits="userSpaceOnUse">
+                                            <stop stop-color="#7D72FC" />
+                                            <stop
+                                                offset="1"
+                                                stop-color="#7D72FC"
+                                                stop-opacity="0" />
+                                        </linearGradient>
+                                    </defs>
+                                </svg>
+                            </span>
+                            <div>
+                                <p class="text-[14px] text-[#8B89D9]">Name</p>
+                                <p class="text-[#8D8D8D] text-[12px]">Bring Dinner Meal</p>
+                            </div>
+                        </div>
+
+                        <span class="text-[#8B89D9] text-[12px] pt-1">08:00 AM - 09:00 AM</span>
+                        <div
+                            class="flex items-center mb-2 bg-[#FAFAFA] border border-[#E3E3E3] pl-2 py-2 rounded-xl">
+                            <div
+                                class="bg-[#70D997] w-[50px] h-[48px] flex flex-col items-center text-green-600 rounded-lg p-2">
+                                <span class="text-[14px] font-bold text-[#FFFFFFD4]">
+                                    17
+                                </span>
+                                <span class="text-[10px] text-[#FFFFFFD4]">Jun</span>
+                            </div>
+                            <span class="px-3">
+                                <svg
+                                    width="5"
+                                    height="26"
+                                    viewBox="0 0 5 26"
+                                    fill="none"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <rect
+                                        x="1.57812"
+                                        y="2.36377"
+                                        width="1.57576"
+                                        height="23.6364"
+                                        rx="0.787879"
+                                        fill="url(#paint0_linear_6232_3649)"
+                                        fill-opacity="0.7" />
+                                    <circle
+                                        cx="2.36364"
+                                        cy="2.36364"
+                                        r="2.36364"
+                                        fill="#2C2C73" />
+                                    <defs>
+                                        <linearGradient
+                                            id="paint0_linear_6232_3649"
+                                            x1="2.366"
+                                            y1="2.36377"
+                                            x2="2.366"
+                                            y2="26.0001"
+                                            gradientUnits="userSpaceOnUse">
+                                            <stop stop-color="#7D72FC" />
+                                            <stop
+                                                offset="1"
+                                                stop-color="#7D72FC"
+                                                stop-opacity="0" />
+                                        </linearGradient>
+                                    </defs>
+                                </svg>
+                            </span>
+                            <div>
+                                <p class="text-[14px] text-[#8B89D9]">Name</p>
+                                <p class="text-[#8D8D8D] text-[12px]">Lorem ipsum dolor</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Chats -->
+                <div class="bg-white p-4 rounded-lg xl:sticky">
+                    <div class="flex justify-between items-center mb-4">
+                        <span class="text-[#2C2C73] font-bold text-[18px]"> Chats </span>
+                        <a class="text-[#8D8D8D] text-[13px] font-semibold" href="#">
+                            See All
+                        </a>
+                    </div>
+                    <!-- 1 -->
+                    <div
+                        class="flex items-center mb-2 border border-[1px] p-2 px-3 rounded-md">
+                        <div>
+                            <img src="Assets/images/chatboy.svg" alt="" />
+                        </div>
+                        <div class="pl-2">
+                            <p class="font-semibold text-[14px] text-[#8B89D9]">
+                                Alex Linderson
+                            </p>
+                            <p class="text-[#797C7B] text-[12px]">How are you today?</p>
+                        </div>
+                        <div class="ml-auto items-center justify-center">
+                            <span class="text-[#797C7B] text-[12px] font-semibold">
+                                2 min ago
+                            </span>
+                            <div
+                                class="bg-[#4B96F5] text-[#FFFFFF] ml-auto mt-1 h-[18px] w-[18px] text-[12px] text-center items-center rounded-full">
+                                3
+                            </div>
+                        </div>
+                    </div>
+                    <!-- 2 -->
+                    <div
+                        class="flex items-center mb-2 border border-[1px] p-2 px-3 rounded-md">
+                        <div>
+                            <img src="Assets/images/chatboy.svg" alt="" />
+                        </div>
+                        <div class="pl-2">
+                            <p class="font-semibold text-[14px] text-[#8B89D9]">
+                                Alex Linderson
+                            </p>
+                            <p class="text-[#797C7B] text-[12px]">How are you today?</p>
+                        </div>
+                        <div class="ml-auto items-center justify-center">
+                            <span class="text-[#797C7B] text-[12px] font-semibold">
+                                2 min ago
+                            </span>
+                            <div
+                                class="bg-[#4B96F5] text-[#FFFFFF] ml-auto mt-1 h-[18px] w-[18px] text-[12px] text-center items-center rounded-full">
+                                3
+                            </div>
+                        </div>
+                    </div>
+                    <!-- 3 -->
+                    <div
+                        class="flex items-center mb-2 border border-[1px] p-2 px-3 rounded-md">
+                        <div>
+                            <img src="Assets/images/chatboy.svg" alt="" />
+                        </div>
+                        <div class="pl-2">
+                            <p class="font-semibold text-[14px] text-[#8B89D9]">
+                                Alex Linderson
+                            </p>
+                            <p class="text-[#797C7B] text-[12px]">How are you today?</p>
+                        </div>
+                        <div class="ml-auto items-center justify-center">
+                            <span class="text-[#797C7B] text-[12px] font-semibold">
+                                2 min ago
+                            </span>
+                            <div
+                                class="bg-[#4B96F5] text-[#FFFFFF] ml-auto mt-1 h-[18px] w-[18px] text-[12px] text-center items-center rounded-full">
+                                3
+                            </div>
+                        </div>
+                    </div>
+                    <!-- 4 -->
+                    <div
+                        class="flex items-center mb-2 border border-[1px] p-2 px-3 rounded-md">
+                        <div>
+                            <img src="Assets/images/chatboy.svg" alt="" />
+                        </div>
+                        <div class="pl-2">
+                            <p class="font-semibold text-[14px] text-[#8B89D9]">
+                                Alex Linderson
+                            </p>
+                            <p class="text-[#797C7B] text-[12px]">How are you today?</p>
+                        </div>
+                        <div class="ml-auto items-center justify-center">
+                            <span class="text-[#797C7B] text-[12px] font-semibold">
+                                2 min ago
+                            </span>
+                            <div
+                                class="bg-[#4B96F5] text-[#FFFFFF] ml-auto mt-1 h-[18px] w-[18px] text-[12px] text-center items-center rounded-full">
+                                3
+                            </div>
+                        </div>
+                    </div>
+                    <!-- 5 -->
+                    <div
+                        class="flex items-center mb-2 border border-[1px] p-2 px-3 rounded-md">
+                        <div>
+                            <img src="Assets/images/chatboy.svg" alt="" />
+                        </div>
+                        <div class="pl-2">
+                            <p class="font-semibold text-[14px] text-[#8B89D9]">
+                                Alex Linderson
+                            </p>
+                            <p class="text-[#797C7B] text-[12px]">How are you today?</p>
+                        </div>
+                        <div class="ml-auto items-center justify-center">
+                            <span class="text-[#797C7B] text-[12px] font-semibold">
+                                2 min ago
+                            </span>
+                            <div
+                                class="bg-[#4B96F5] text-[#FFFFFF] ml-auto mt-1 h-[18px] w-[18px] text-[12px] text-center items-center rounded-full">
+                                3
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <!-- Sidebar Popup -->
@@ -389,7 +1445,7 @@
                 <div class="">
                     <button
                         id="add-member"
-                        class="bg-[#8B89D9] text-[#FFFFFF] py-4 font-semibold rounded-xl mb-4 w-full xl:w-[419px] lg:h-[50px]"
+                        class="bg-[#8B89D9] text-[#FFFFFF] font-semibold rounded-xl mb-4 w-full xl:w-[419px] lg:h-[50px]"
                         onclick="openAddMemberModal()">
                         Add Member
                     </button>
@@ -416,7 +1472,7 @@
                 class="bg-[#FAFAFA] p-8 rounded-lg shadow-md text-center items-center justify-center flex flex-col relative xl:w-[560px] xl:h-[420px]">
                 <button
                     onclick="closeAddMemberModal()"
-                    class="absolute top-4 right-4 text-gray-800 font-bold py-1 px-3 rounded-full"
+                    class="absolute top-4 right-4 bg- hover:bg-gray-400 text-gray-800 font-bold py-1 px-3 rounded-full"
                     aria-label="Close add member modal"></button>
 
                 <h2 class="text-center text-[#2C2C73] font-bold text-[24px] mb-6">
@@ -540,7 +1596,7 @@
                     <div
                         class="flex items-center bg-[#FFFFFF] lg:w-[200px] border border-[#E3E3E3] rounded-lg p-2">
                         <img
-                            src="{{asset('assets/images/chatboy.svg')}}"
+                            src="Assets/images/chatboy.svg"
                             alt="Profile picture"
                             class="w-[52px] h-[52px] mr-2" />
                         <div>
@@ -557,7 +1613,7 @@
                     <div
                         class="flex items-center bg-[#FFFFFF] lg:w-[200px] border border-[#E3E3E3] rounded-lg p-2">
                         <img
-                            src="{{asset('assets/images/chatboy.svg')}}"
+                            src="Assets/images/chatboy.svg"
                             alt="Profile picture"
                             class="w-[52px] h-[52px] mr-2" />
                         <div>
@@ -585,628 +1641,9 @@
                 </div>
             </div>
         </div>
-        <!-- main body -->
-        <div
-            class="w-full flex flex-col md:ml-[180px] xl:ml-[268px] lg:flex-row mainBody">
-            <!-- Main Content md:w-2/4 lg:w-[706px] -->
-            <div class="w-full lg:h-[194px] p-4">
-                <!-- Create Post -->
-                <div id="create-post-btn" class="bg-white p-4 mb-4 cursor-pointer">
-                    <span class="text-[#2C2C73] ml-auto text-[18px] font-bold">Create Post</span>
-                    <div
-                        class="flex items-start border border-[#E3E3E3] bg-[#FAFAFA] rounded-lg p-2 pt-1 mt-2 lg:w-[608px] h-[87px] xl:w-full mb-2">
-                        <img
-                            alt="Profile Picture"
-                            class="rounded-full w-8 h-8 mr-2 mt-1"
-                            src="{{asset('assets/images/Ellipse 1201.svg')}}" />
-                        <textarea
-                            class="w-full h-full p-2 pl-0 bg-[#FAFAFA] text-[#8D8D8D] text-[13px] outline-none resize-none"
-                            placeholder="What's in your mind?"></textarea>
-                    </div>
-
-                    <div class="flex space-x-2">
-                        <button
-                            class="flex items-center space-x-2 py-2 px-4 bg-[#FFBB0033] rounded-lg w-[109px]">
-                            <img src="{{asset('assets/images/gallery-add.svg')}}" class="" />
-                            <span class="text-[#FFBB00] font-semibold text-[13px]">
-                                Gallery
-                            </span>
-                        </button>
-                        <button
-                            class="flex items-center space-x-2 py-2 px-4 bg-[#009DFF33] rounded-lg w-[109px]">
-                            <img src="{{asset('assets/images/video-play.svg')}}" class="fas fa-image" />
-                            <span class="text-[#009DFF] font-semibold text-[13px]">
-                                Video
-                            </span>
-                        </button>
-                    </div>
-                </div>
-                <!-- popup create post -->
-                <div
-                    id="createPostModal"
-                    class="fixed inset-0 bg-gray-600 bg-opacity-50 hidden flex items-center mx-auto justify-center z-50 p-4">
-                    <div
-                        class="bg-[#FAFAFA] p-6 lg:p-8 rounded-lg shadow-md relative w-full md:w-[560px]">
-                        <h1
-                            class="text-[#2C2C73] font-semibold xl:font-bold text-[24px] text-center mb-4">
-                            Create Post
-                        </h1>
-                        <form class="space-y-4">
-                            <div
-                                id="create-post-btn"
-                                class="bg-white p-4 mb-4 cursor-pointer">
-                                <span class="text-[#2C2C73] ml-auto text-[18px] font-bold">Create Post</span>
-                                <div
-                                    class="flex items-start border border-[#E3E3E3] bg-[#FAFAFA] rounded-lg p-2 pt-1 mt-2 w-full h-[87px] mb-2">
-                                    <img
-                                        alt="Profile Picture"
-                                        class="rounded-full w-8 h-8 mr-2 mt-1"
-                                        src="Assets/images/Ellipse 1201.svg" />
-                                    <textarea
-                                        class="w-full h-full p-2 pl-0 bg-[#FAFAFA] text-[#8D8D8D] text-[13px] outline-none resize-none"
-                                        placeholder="What's new?"></textarea>
-                                </div>
-
-                                <div class="flex space-x-2">
-                                    <button
-                                        class="flex items-center space-x-2 py-2 px-4 bg-[#FFBB0033] rounded-lg w-[109px]">
-                                        <img src="Assets/images/gallery-add.svg" class="" />
-                                        <span class="text-[#FFBB00]"> Gallery </span>
-                                    </button>
-                                    <button
-                                        class="flex items-center space-x-2 py-2 px-4 bg-[#009DFF33] rounded-lg w-[109px]">
-                                        <img
-                                            src="Assets/images/video-play.svg"
-                                            class="fas fa-image" />
-                                        <span class="text-[#009DFF]"> Video </span>
-                                    </button>
-                                </div>
-                            </div>
-
-                            <div class="flex gap-2 md:gap-6 text-xs text-[#8B8B8B]">
-                                <div class="inline-flex items-center">
-                                    <label class="flex items-center cursor-pointer relative">
-                                        <input
-                                            type="checkbox"
-                                            checked
-                                            class="peer h-5 w-5 cursor-pointer transition-all appearance-none rounded border border-[#D0D5DD] checked:bg-[#FAFAFA] checked:border-[#8B89D9]"
-                                            id="check" />
-                                        <span
-                                            class="absolute text-white opacity-0 peer-checked:opacity-100 top-2.5 left-2.5 transform -translate-x-1/2 -translate-y-1/2 pointer-events-none">
-                                            <img src="{{asset('assets/images/tick.svg')}}" alt="" />
-                                        </span>
-                                        <span
-                                            class="pl-1 md:pl-2 text-[16px] font-[500] text-[#8D8D8D]">My Clique</span>
-                                    </label>
-                                </div>
-
-                                <!--  -->
-
-                                <div class="inline-flex items-center">
-                                    <label class="flex items-center cursor-pointer relative">
-                                        <input
-                                            type="checkbox"
-                                            class="peer h-5 w-5 cursor-pointer transition-all appearance-none rounded border border-[#D0D5DD] checked:bg-[#FAFAFA] checked:border-[#8B89D9]"
-                                            id="check" />
-                                        <span
-                                            class="absolute text-white opacity-0 peer-checked:opacity-100 top-2.5 left-2.5 transform -translate-x-1/2 -translate-y-1/2 pointer-events-none">
-                                            <img src="{{asset('assets/images/tick.svg')}}" alt="" />
-                                        </span>
-                                        <span
-                                            class="pl-1 md:pl-2 text-[16px] font-[500] text-[#8D8D8D]">Custom Group</span>
-                                    </label>
-                                </div>
-                                <div class="inline-flex items-center">
-                                    <label class="flex items-center cursor-pointer relative">
-                                        <input
-                                            type="checkbox"
-                                            class="peer h-5 w-5 cursor-pointer transition-all appearance-none rounded border border-[#D0D5DD] checked:bg-[#FAFAFA] checked:border-[#8B89D9]"
-                                            id="check" />
-                                        <span
-                                            class="absolute text-white opacity-0 peer-checked:opacity-100 top-2.5 left-2.5 transform -translate-x-1/2 -translate-y-1/2 pointer-events-none">
-                                            <img src="{{asset('assets/images/tick.svg')}}" alt="" />
-                                        </span>
-                                        <span
-                                            class="pl-1 md:pl-2 text-[16px] font-[500] text-[#8D8D8D]">Only Me</span>
-                                    </label>
-                                </div>
-                            </div>
-
-                            <div>
-                                <button
-                                    class="text-[15px] text-[#8B89D9] font-semibold mb-2"
-                                    type="button">
-                                    Set Post Visibility Time
-                                </button>
-                                <div class="flex gap-4 text-xs text-[#8B8B8B]">
-                                    <div class="flex flex-col w-1/2">
-                                        <label class="my-1 text-[15px] font-semibold" for="from">From</label>
-                                        <input
-                                            class="border border-[#D9D9D9] rounded-md px-3 py-2 text-center h-[50px] text-[15px] placeholder:text-[#8D8D8D] focus:outline-none"
-                                            id="from"
-                                            type="date"
-                                            placeholder="12:30 AM, 30 Jan 2025" />
-                                    </div>
-                                    <div class="flex flex-col w-1/2">
-                                        <label class="my-1 text-[15px] font-semibold" for="to">To</label>
-                                        <input
-                                            class="border border-[#D9D9D9] rounded-md px-3 py-2 text-[15px] h-[50px] text-center text-[15px] placeholder:text-[#8D8D8D] focus:outline-none"
-                                            id="to"
-                                            type="date"
-                                            placeholder="12:30 AM, 01 Feb 2025" />
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="flex items-center gap-2 text-xs text-[#8B8B8B]">
-                                <div class="inline-flex items-center">
-                                    <label class="flex items-center cursor-pointer relative">
-                                        <input
-                                            type="checkbox"
-                                            class="peer h-5 w-5 cursor-pointer transition-all appearance-none rounded border border-[#D0D5DD] checked:bg-[#FAFAFA] checked:border-[#8B89D9]"
-                                            id="check" />
-                                        <span
-                                            class="absolute text-white opacity-0 peer-checked:opacity-100 top-2.5 left-2.5 transform -translate-x-1/2 -translate-y-1/2 pointer-events-none">
-                                            <img src="{{asset('assets/images/tick.svg')}}" alt="" />
-                                        </span>
-                                        <span
-                                            class="pl-1 md:pl-2 text-[16px] font-[500] text-[#8D8D8D]">Post For All Time</span>
-                                    </label>
-                                </div>
-                            </div>
-                            <div class="flex items-center justify-center gap-4 mt-6">
-                                <button
-                                    class="h-[50px] w-full xl:w-[190px] border border-[#262664] text-[#2C2C73] rounded-md py-2 text-sm"
-                                    type="button"
-                                    onclick="closeModal()">
-                                    Cancel
-                                </button>
-                                <button
-                                    class="h-[50px] w-full xl:w-[190px] bg-[#6FCF97] text-[#FFFFFF] rounded-md py-2 text-sm"
-                                    type="submit">
-                                    Publish
-                                </button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-                <!-- Posts -->
-                <div class="bg-white mb-4">
-                    <div>
-                        <div
-                            class="mb-4 border-b border-gray-200 dark:border-gray-200 pb-4">
-                            <ul
-                                class="flex flex-wrap -mb-px text-sm font-medium text-center pl-2 space-x-2"
-                                id="tab-list">
-                                <li class="me-2" role="presentation">
-                                    <button
-                                        class="tab-button inline-block p-4 rounded-t-lg text-[#2C2C73] pb-1 relative after:content-[''] after:absolute after:left-1/2 after:bottom-0 after:w-12 after:-translate-x-1/2 after:h-[2px] after:bg-[#2C2C73] font-semibold text-[13px]"
-                                        data-target="styled-profile">
-                                        Popular
-                                    </button>
-                                </li>
-                                <li class="me-2" role="presentation">
-                                    <button
-                                        class="tab-button inline-block p-4 rounded-t-lg text-[#8D8D8D] pb-1 relative after:content-[''] after:absolute after:left-1/2 after:bottom-0 after:w-12 after:-translate-x-1/2 after:h-[2px] after:bg-[#2C2C73] font-semibold text-[13px]"
-                                        data-target="styled-dashboard">
-                                        Recent
-                                    </button>
-                                </li>
-                                <li class="me-2" role="presentation">
-                                    <button
-                                        class="tab-button inline-block p-4 rounded-t-lg text-[#8D8D8D] pb-1 relative after:content-[''] after:absolute after:left-1/2 after:bottom-0 after:w-14 after:-translate-x-1/2 after:h-[2px] after:bg-[#2C2C73] font-semibold text-[13px]"
-                                        data-target="styled-settings">
-                                        My Posts
-                                    </button>
-                                </li>
-                            </ul>
-                        </div>
-                        <div id="tab-content">
-                            <div class="tab-panel p-4 bg-white hidden" id="styled-profile">
-                                <!-- 1 -->
-                                <div class="mb-4">
-                                    <div class="flex items-center mb-2">
-                                        <img
-                                            alt="Profile Picture"
-                                            class="rounded-full w-12 h-12 mr-2"
-                                            height="50"
-                                            src="https://storage.googleapis.com/a1aa/image/Yov4tMvv7PItnxFz4XlAL6Jwt7VeyK5uzBijbcOipVA.jpg"
-                                            width="50" />
-
-                                        <div class="flex flex-col pl-2 w-full">
-                                            <div
-                                                class="flex flex-col lg:flex-row items-start lg:items-center justify-between w-full gap-2 lg:gap-12">
-                                                <span class="text-[18px] text-[#8B89D9]">
-                                                    Shawaizkhan.UIUX
-                                                </span>
-                                                <span
-                                                    class="text-[#FF4141] text-[13px] font-semibold">
-                                                    Expires: 12:00 AM, Dec 4, 2024
-                                                </span>
-                                            </div>
-                                            <span
-                                                class="text-[#8D8D8D] font-semibold text-[13px] mt-1">
-                                                Dec 2, 2024 at 11:30 AM
-                                            </span>
-                                        </div>
-                                    </div>
-                                    <p class="text-[#8D8D8D] text-[13px] mb-2">
-                                        Lorem ipsum dolor sit amet consectetur. Faucibus risus id
-                                        sit lacus amet. Enim tortor proin tellus euismod.
-                                    </p>
-                                    <img
-                                        alt="Post Image"
-                                        class="w-full rounded-lg"
-                                        height="300"
-                                        src="{{asset('assets/images/Rectangle 110668.svg')}}"
-                                        width="600" />
-                                </div>
-                                <!-- 2 -->
-                                <div class="mb-4">
-                                    <div class="flex items-center mb-2">
-                                        <img
-                                            alt="Profile Picture"
-                                            class="rounded-full w-12 h-12 mr-2"
-                                            height="50"
-                                            src="https://storage.googleapis.com/a1aa/image/Yov4tMvv7PItnxFz4XlAL6Jwt7VeyK5uzBijbcOipVA.jpg"
-                                            width="50" />
-                                        <!-- <div class="flex flex-col pl-2">
-                      <span class="text-[18px] text-[#8B89D9]">
-                        Shawaizkhan.UIUX
-                      </span>
-                      <span class="text-[#8D8D8D] text-[13px] font-semibold">
-                        Dec 2, 2024 at 11:30 AM
-                      </span>
-                    </div> -->
-                                        <div class="flex flex-col pl-2 w-full">
-                                            <div
-                                                class="flex flex-col lg:flex-row items-start lg:items-center justify-between w-full gap-2 lg:gap-12">
-                                                <span class="text-[18px] text-[#8B89D9]">
-                                                    Shawaizkhan.UIUX
-                                                </span>
-                                                <span
-                                                    class="text-[#FF4141] text-[13px] font-semibold">
-                                                    Expires: 12:00 AM, Dec 4, 2024
-                                                </span>
-                                            </div>
-                                            <span
-                                                class="text-[#8D8D8D] font-semibold text-[13px] mt-1">
-                                                Dec 2, 2024 at 11:30 AM
-                                            </span>
-                                        </div>
-                                    </div>
-                                    <p class="text-[#8D8D8D] text-[13px] mb-2">
-                                        Lorem ipsum dolor sit amet consectetur. Faucibus risus id
-                                        sit lacus amet. Enim tortor proin tellus euismod.
-                                    </p>
-                                    <img
-                                        alt="Post Image"
-                                        class="w-full rounded-lg"
-                                        height="300"
-                                        src="{{asset('assets/images/christopher-gower-m_HRfLhgABo-unsplash.jpg')}}"
-                                        width="600" />
-                                </div>
-                            </div>
-                            <!-- 2 -->
-                            <div
-                                class="tab-panel p-4 bg-gray-50 dark:bg-gray-800 hidden"
-                                id="styled-dashboard">
-                                <p class="text-sm text-gray-500 dark:text-gray-400">
-                                    This is the
-                                    <strong class="font-medium text-gray-800 dark:text-white">Dashboard tab</strong>.
-                                </p>
-                            </div>
-                            <!-- 3 -->
-                            <div
-                                class="tab-panel p-4 bg-gray-50 dark:bg-gray-800 hidden"
-                                id="styled-settings">
-                                <p class="text-sm text-gray-500 dark:text-gray-400">
-                                    This is the
-                                    <strong class="font-medium text-gray-800 dark:text-white">Settings tab</strong>.
-                                </p>
-                            </div>
-                            <!-- 4 -->
-                            <div
-                                class="tab-panel p-4 bg-gray-50 dark:bg-gray-800 hidden"
-                                id="styled-contacts">
-                                <p class="text-sm text-gray-500 dark:text-gray-400">
-                                    This is the
-                                    <strong class="font-medium text-gray-800 dark:text-white">Contacts tab</strong>.
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- <hr class="border-gray-300 h-2" /> -->
-                </div>
-            </div>
-            <!-- Right Sidebar md:w-1/4 lg:w-[408px] -->
-            <div class="w-full xl:max-w-[408px] p-4 md:pl-0">
-                <!-- Upcoming Event -->
-                <div class="bg-white p-4 mb-4">
-                    <div class="flex justify-between items-center mb-4">
-                        <span class="font-bold text-[18px] text-[#2C2C73]">
-                            Upcoming Event
-                        </span>
-                        <a class="text-[#8D8D8D] font-semibold text-[13px]" href="#">
-                            See All
-                        </a>
-                    </div>
-                    <img
-                        alt="Event Image"
-                        class="w-full rounded-lg mb-2"
-                        height="150"
-                        src="{{asset('assets/images/Rectangle 110662.svg')}}"
-                        width="300" />
-                    <div class="flex flex-row gap-2 items-center pt-2">
-                        <div
-                            class="flex flex-col items-center py-1 px-2 rounded-lg shadow-md w-[40px] h-[40px]">
-                            <span class="text-[#2C2C73] text-[14px] font-bold"> 17 </span>
-                            <span class="text-[10px] text-[#2C2C73]">Jun</span>
-                        </div>
-                        <div class="flex flex-col">
-                            <p class="font-semibold text-[13px] text-[#8D8D8D]">
-                                Event Name
-                            </p>
-                            <p class="text-[#8D8D8D] text-[13px]">Location</p>
-                        </div>
-                    </div>
-                </div>
-                <!-- My Tasks -->
-                <div class="bg-white p-4 mb-4">
-                    <span class="font-bold text-[#2C2C73] text-[15px]"> My Tasks </span>
-                    <div class="mt-2">
-                        <span class="text-[#8B89D9] text-[12px] pt-1">08:00 AM - 09:00 AM</span>
-                        <div
-                            class="flex items-center mb-2 bg-[#FAFAFA] border border-[#E3E3E3] pl-2 py-2 rounded-xl">
-                            <div
-                                class="bg-[#70D997] w-[50px] h-[48px] flex flex-col items-center text-green-600 rounded-lg p-2"
-                                style="font-family: Poppins, sans-serif">
-                                <span class="text-[14px] font-bold text-[#FFFFFFD4]">
-                                    17
-                                </span>
-                                <span class="text-[10px] text-[#FFFFFFD4]">Jun</span>
-                            </div>
-                            <span class="px-3">
-                                <svg
-                                    width="5"
-                                    height="26"
-                                    viewBox="0 0 5 26"
-                                    fill="none"
-                                    xmlns="http://www.w3.org/2000/svg">
-                                    <rect
-                                        x="1.57812"
-                                        y="2.36377"
-                                        width="1.57576"
-                                        height="23.6364"
-                                        rx="0.787879"
-                                        fill="url(#paint0_linear_6232_3649)"
-                                        fill-opacity="0.7" />
-                                    <circle
-                                        cx="2.36364"
-                                        cy="2.36364"
-                                        r="2.36364"
-                                        fill="#2C2C73" />
-                                    <defs>
-                                        <linearGradient
-                                            id="paint0_linear_6232_3649"
-                                            x1="2.366"
-                                            y1="2.36377"
-                                            x2="2.366"
-                                            y2="26.0001"
-                                            gradientUnits="userSpaceOnUse">
-                                            <stop stop-color="#7D72FC" />
-                                            <stop
-                                                offset="1"
-                                                stop-color="#7D72FC"
-                                                stop-opacity="0" />
-                                        </linearGradient>
-                                    </defs>
-                                </svg>
-                            </span>
-                            <div>
-                                <p class="text-[14px] text-[#8B89D9]">Name</p>
-                                <p class="text-[#8D8D8D] text-[12px]">Bring Dinner Meal</p>
-                            </div>
-                        </div>
-
-                        <span class="text-[#8B89D9] text-[12px] pt-1">08:00 AM - 09:00 AM</span>
-                        <div
-                            class="flex items-center mb-2 bg-[#FAFAFA] border border-[#E3E3E3] pl-2 py-2 rounded-xl">
-                            <div
-                                class="bg-[#70D997] w-[50px] h-[48px] flex flex-col items-center text-green-600 rounded-lg p-2"
-                                style="font-family: Poppins, sans-serif">
-                                <span class="text-[14px] font-bold text-[#FFFFFFD4]">
-                                    17
-                                </span>
-                                <span class="text-[10px] text-[#FFFFFFD4]">Jun</span>
-                            </div>
-                            <span class="px-3">
-                                <svg
-                                    width="5"
-                                    height="26"
-                                    viewBox="0 0 5 26"
-                                    fill="none"
-                                    xmlns="http://www.w3.org/2000/svg">
-                                    <rect
-                                        x="1.57812"
-                                        y="2.36377"
-                                        width="1.57576"
-                                        height="23.6364"
-                                        rx="0.787879"
-                                        fill="url(#paint0_linear_6232_3649)"
-                                        fill-opacity="0.7" />
-                                    <circle
-                                        cx="2.36364"
-                                        cy="2.36364"
-                                        r="2.36364"
-                                        fill="#2C2C73" />
-                                    <defs>
-                                        <linearGradient
-                                            id="paint0_linear_6232_3649"
-                                            x1="2.366"
-                                            y1="2.36377"
-                                            x2="2.366"
-                                            y2="26.0001"
-                                            gradientUnits="userSpaceOnUse">
-                                            <stop stop-color="#7D72FC" />
-                                            <stop
-                                                offset="1"
-                                                stop-color="#7D72FC"
-                                                stop-opacity="0" />
-                                        </linearGradient>
-                                    </defs>
-                                </svg>
-                            </span>
-                            <div>
-                                <p class="text-[14px] text-[#8B89D9]">Name</p>
-                                <p class="text-[#8D8D8D] text-[12px]">Lorem ipsum dolor</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!-- Chats -->
-                <div class="bg-white p-4 rounded-lg">
-                    <div class="flex justify-between items-center mb-4">
-                        <span class="text-[#2C2C73] font-bold text-[18px]"> Chats </span>
-                        <a class="text-[#8D8D8D] text-[13px] font-semibold" href="#">
-                            See All
-                        </a>
-                    </div>
-                    <!-- 1 -->
-                    <div
-                        class="flex items-center mb-2 border border-[1px] p-2 px-3 rounded-md">
-                        <div>
-                            <img src="{{asset('assets/images/chatboy.svg')}}" alt="" />
-                        </div>
-                        <div class="pl-2">
-                            <p class="font-semibold text-[14px] text-[#8B89D9]">
-                                Alex Linderson
-                            </p>
-                            <p class="text-[#797C7B] text-[12px]">How are you today?</p>
-                        </div>
-                        <div class="ml-auto items-center justify-center">
-                            <span class="text-[#797C7B] text-[10px] font-semibold">
-                                2 min ago
-                            </span>
-                            <div
-                                class="bg-[#4B96F5] text-[#FFFFFF] ml-auto mt-1 h-[18px] w-[18px] text-[12px] text-center items-center rounded-full">
-                                3
-                            </div>
-                        </div>
-                    </div>
-                    <!-- 2 -->
-                    <div
-                        class="flex items-center mb-2 border border-[1px] p-2 px-3 rounded-md">
-                        <div>
-                            <img src="{{asset('assets/images/chatboy.svg')}}" alt="" />
-                        </div>
-                        <div class="pl-2">
-                            <p class="font-semibold text-[14px] text-[#8B89D9]">
-                                Alex Linderson
-                            </p>
-                            <p class="text-[#797C7B] text-[12px]">How are you today?</p>
-                        </div>
-                        <div class="ml-auto items-center justify-center">
-                            <span class="text-[#797C7B] text-[10px] font-semibold">
-                                2 min ago
-                            </span>
-                            <div
-                                class="bg-[#4B96F5] text-[#FFFFFF] ml-auto mt-1 h-[18px] w-[18px] text-[12px] text-center items-center rounded-full">
-                                3
-                            </div>
-                        </div>
-                    </div>
-                    <!-- 3 -->
-                    <div
-                        class="flex items-center mb-2 border border-[1px] p-2 px-3 rounded-md">
-                        <div>
-                            <img src="{{asset('assets/images/chatboy.svg')}}" alt="" />
-                        </div>
-                        <div class="pl-2">
-                            <p class="font-semibold text-[14px] text-[#8B89D9]">
-                                Alex Linderson
-                            </p>
-                            <p class="text-[#797C7B] text-[12px]">How are you today?</p>
-                        </div>
-                        <div class="ml-auto items-center justify-center">
-                            <span class="text-[#797C7B] text-[10px] font-semibold">
-                                2 min ago
-                            </span>
-                            <div
-                                class="bg-[#4B96F5] text-[#FFFFFF] ml-auto mt-1 h-[18px] w-[18px] text-[12px] text-center items-center rounded-full">
-                                3
-                            </div>
-                        </div>
-                    </div>
-                    <!-- 4 -->
-                    <div
-                        class="flex items-center mb-2 border border-[1px] p-2 px-3 rounded-md">
-                        <div>
-                            <img src="{{asset('assets/images/chatboy.svg')}}" alt="" />
-                        </div>
-                        <div class="pl-2">
-                            <p class="font-semibold text-[14px] text-[#8B89D9]">
-                                Alex Linderson
-                            </p>
-                            <p class="text-[#797C7B] text-[12px]">How are you today?</p>
-                        </div>
-                        <div class="ml-auto items-center justify-center">
-                            <span class="text-[#797C7B] text-[10px] font-semibold">
-                                2 min ago
-                            </span>
-                            <div
-                                class="bg-[#4B96F5] text-[#FFFFFF] ml-auto mt-1 h-[18px] w-[18px] text-[12px] text-center items-center rounded-full">
-                                3
-                            </div>
-                        </div>
-                    </div>
-                    <!-- 5 -->
-                    <div
-                        class="flex items-center mb-2 border border-[1px] p-2 px-3 rounded-md">
-                        <div>
-                            <img src="{{asset('assets/images/chatboy.svg')}}" alt="" />
-                        </div>
-                        <div class="pl-2">
-                            <p class="font-semibold text-[14px] text-[#8B89D9]">
-                                Alex Linderson
-                            </p>
-                            <p class="text-[#797C7B] text-[12px]">How are you today?</p>
-                        </div>
-                        <div class="ml-auto items-center justify-center">
-                            <span class="text-[#797C7B] text-[10px] font-semibold">
-                                2 min ago
-                            </span>
-                            <div
-                                class="bg-[#4B96F5] text-[#FFFFFF] ml-auto mt-1 h-[18px] w-[18px] text-[12px] text-center items-center rounded-full">
-                                3
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
     </div>
     <!-- ========= -->
     <script>
-        // Open modal when "Create Post" button is clicked
-        document
-            .getElementById("create-post-btn")
-            .addEventListener("click", function() {
-                document.getElementById("createPostModal").classList.remove("hidden");
-            });
-
-        // Close modal when cancel button is clicked
-        function closeModal() {
-            document.getElementById("createPostModal").classList.add("hidden");
-        }
-
-        // Close modal if user clicks outside the modal area
-        window.onclick = function(event) {
-            const modal = document.getElementById("createPostModal");
-            if (event.target === modal) {
-                closeModal();
-            }
-        };
         // for side bar popup //
         const body = document.body;
         const popup = document.getElementById("popup");
@@ -1259,7 +1696,65 @@
             document.getElementById("createListPopup").classList.add("hidden");
             body.classList.remove("overflow-hidden");
         }
-        // ============== //
+        // POPUP CREATE Picture
+        const openPhotosModalBtn = document.getElementById("openPhotosModalBtn");
+        const closePhotosModalBtn = document.getElementById(
+            "closePhotosModalBtn"
+        );
+        const cancelBtnA = document.getElementById("cancelBtnA");
+        const photosModal = document.getElementById("photosModal");
+
+        openPhotosModalBtn.addEventListener("click", () => {
+            photosModal.classList.remove("hidden");
+            photosModal.classList.add("flex");
+        });
+
+        closePhotosModalBtn.addEventListener("click", () => {
+            photosModal.classList.add("hidden");
+            photosModal.classList.remove("flex");
+        });
+
+        cancelBtnA?.addEventListener("click", () => {
+            photosModal.classList.add("hidden");
+            photosModal.classList.remove("flex");
+        });
+
+        // Optional: Click outside to close
+        photosModal.addEventListener("click", (e) => {
+            if (e.target === photosModal) {
+                photosModal.classList.add("hidden");
+                photosModal.classList.remove("flex");
+            }
+        });
+        // POPUP CREATE ALBUM
+        const openModalBtn = document.getElementById("openModalBtn");
+        const closeModalBtn = document.getElementById("closeModalBtn");
+        const cancelBtn = document.getElementById("cancelBtn");
+        const albumModal = document.getElementById("albumModal");
+
+        openModalBtn.addEventListener("click", () => {
+            albumModal.classList.remove("hidden");
+            albumModal.classList.add("flex");
+        });
+
+        closeModalBtn.addEventListener("click", () => {
+            albumModal.classList.add("hidden");
+            albumModal.classList.remove("flex");
+        });
+
+        cancelBtn.addEventListener("click", () => {
+            albumModal.classList.add("hidden");
+            albumModal.classList.remove("flex");
+        });
+
+        // Optional: Close modal when clicking outside the box
+        albumModal?.addEventListener("click", (e) => {
+            if (e.target === albumModal) {
+                albumModal.classList.add("hidden");
+                albumModal.classList.remove("flex");
+            }
+        });
+        // =============== //
         document
             .getElementById("menu-btn")
             .addEventListener("click", function() {
@@ -1334,6 +1829,136 @@
                     activateTab(this.getAttribute("data-target"));
                 });
             });
+        });
+        //   =================modal==================//
+        const albumList = document.getElementById("album-list");
+        const sharedList = document.getElementById("shared-list");
+        const albumGallery = document.getElementById("album-gallery");
+        const modal = document.getElementById("modal");
+        const modalImg = document.getElementById("modal-img");
+
+        function openAlbum() {
+            albumList.classList.add("hidden");
+            sharedList.classList.add("hidden");
+            albumGallery.classList.remove("hidden");
+
+            // Hide "Create new album" button
+            document.getElementById("openModalBtn").classList.add("hidden");
+            // Move "Add Photo" button to the start
+            const addPhotoBtn = document.getElementById("openPhotosModalBtn");
+            const parentDiv = addPhotoBtn.parentElement;
+
+            // Change flex alignment of parent to start
+            parentDiv.classList.remove("items-center", "justify-center");
+            parentDiv.classList.add("items-start", "justify-start");
+        }
+
+        function goBack() {
+            albumGallery.classList.add("hidden");
+            albumList.classList.remove("hidden");
+            sharedList.classList.remove("hidden");
+            // Show "Create new album" button
+            document.getElementById("openModalBtn").classList.remove("hidden");
+
+            // Reset position of "Add Photo" button
+            const addPhotoBtn = document.getElementById("openPhotosModalBtn");
+            const parentDiv = addPhotoBtn.parentElement;
+
+            // Reset flex alignment of parent to center
+            parentDiv.classList.remove("items-start", "justify-start");
+            parentDiv.classList.add("items-center", "justify-center");
+        }
+
+        const lightbox = document.getElementById("lightbox");
+        const lightboxImage = document.getElementById("lightboxImage");
+        const closeLightbox = document.getElementById("closeLightbox");
+        const imageCaption = document.getElementById("imageCaption");
+        const captionBox = document.getElementById("captionBox");
+        const thumbnailContainer = document.getElementById("thumbnailContainer");
+
+        const galleryImages = Array.from(
+            document.querySelectorAll(".gallery-img")
+        );
+        const images = galleryImages.map((img) => img.src);
+        const captions = images.map((_, index) => `Caption here ${index + 1}`);
+        let currentIndex = 0;
+
+        galleryImages.forEach((img, index) => {
+            img.addEventListener("click", () => openLightbox(index));
+        });
+
+        function openLightbox(index) {
+            currentIndex = index;
+            updateLightbox();
+            lightbox.classList.remove("hidden");
+            setTimeout(() => lightbox.classList.remove("opacity-0"), 10);
+        }
+
+        function closeModal() {
+            lightbox.classList.add("opacity-0");
+            setTimeout(() => lightbox.classList.add("hidden"), 300);
+        }
+
+        function closeCaption() {
+            captionBox.classList.add("hidden");
+        }
+
+        function updateLightbox() {
+            lightboxImage.src = images[currentIndex];
+            imageCaption.textContent = captions[currentIndex];
+            captionBox.classList.remove("hidden");
+
+            // // Check if screen width is large (>= 1024px)
+            // if (window.innerWidth >= 1024) {
+            //   lightboxImage.style.width = "842px";
+            //   lightboxImage.style.height = "464px";
+            //   lightboxImage.style.objectFit = "cover";
+            // } else {
+            //   // Reset to default size if not a large screen
+            //   lightboxImage.style.width = "auto";
+            //   lightboxImage.style.height = "auto";
+            //   lightboxImage.style.objectFit = "contain";
+            // }
+            updateThumbnails();
+        }
+
+        function nextImage() {
+            currentIndex = (currentIndex + 1) % images.length;
+            updateLightbox();
+        }
+
+        function prevImage() {
+            currentIndex = (currentIndex - 1 + images.length) % images.length;
+            updateLightbox();
+        }
+
+        function updateThumbnails() {
+            thumbnailContainer.innerHTML = "";
+            images.forEach((src, index) => {
+                const thumb = document.createElement("img");
+                thumb.src = src;
+                thumb.className = `w-0 h-0 object-cover rounded ${
+            index === currentIndex ? "ring-2 ring-white" : ""
+          }`;
+                thumb.addEventListener("click", () => {
+                    currentIndex = index;
+                    updateLightbox();
+                });
+                thumbnailContainer.appendChild(thumb);
+            });
+        }
+
+        closeLightbox.addEventListener("click", closeModal);
+
+        let startX = 0;
+        lightbox.addEventListener(
+            "touchstart",
+            (e) => (startX = e.touches[0].clientX)
+        );
+        lightbox.addEventListener("touchend", (e) => {
+            let endX = e.changedTouches[0].clientX;
+            if (startX - endX > 50) nextImage();
+            else if (endX - startX > 50) prevImage();
         });
         // ================ notification =============== //
         document.addEventListener("DOMContentLoaded", function() {

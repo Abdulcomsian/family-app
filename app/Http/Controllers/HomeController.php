@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
+use App\Models\Member;
 use Illuminate\Support\Facades\View as FacadesView;
 
 class HomeController extends Controller
@@ -25,13 +26,7 @@ class HomeController extends Controller
      */
     public function index(): View
     {
-        return view('home');
-    }
-
-    public function adminHome(): View
-
-    {
-
-        return view('adminHome');
+        $members = Member::where('user_id', auth()->id())->latest()->get();
+        return view('user.index', compact('members'));
     }
 }

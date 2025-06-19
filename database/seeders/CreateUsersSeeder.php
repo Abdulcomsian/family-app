@@ -19,11 +19,7 @@ class CreateUsersSeeder extends Seeder
             [
 
                 'name' => 'Admin User',
-
                 'email' => 'admin@gmail.com',
-
-                'type' => 1,
-
                 'password' => bcrypt('admin123'),
 
             ],
@@ -31,11 +27,7 @@ class CreateUsersSeeder extends Seeder
             [
 
                 'name' => 'User',
-
                 'email' => 'user@gmail.com',
-
-                'type' => 0,
-
                 'password' => bcrypt('test123'),
 
             ],

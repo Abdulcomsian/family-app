@@ -45,14 +45,14 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    protected function type(): Attribute
+    // protected function type(): Attribute
 
-    {
+    // {
 
-        return new Attribute(
+    //     return new Attribute(
 
-            get: fn($value) =>  ["viewers", "parent"][$value],
+    //         get: fn($value) =>  ["viewers", "parent"][$value],
 
-        );
-    }
+    //     );
+    // }
 }
