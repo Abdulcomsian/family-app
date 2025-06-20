@@ -16,4 +16,9 @@ class Member extends Model
     {
         return $this->belongsToMany(Event::class, 'event_member');
     }
+
+    public function tasks()
+    {
+        return $this->belongsToMany(Task::class, 'task_member');
+    }
 }

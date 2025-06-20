@@ -185,7 +185,7 @@
                     </li>
                 </ul>
                 <div class="flex items-center space-x-6">
-                    <a href="chat.html">
+                    <a href="{{route('chat')}}">
                         <img src="Assets/images/nav-6.svg" class=" " />
                     </a>
 
@@ -1457,97 +1457,41 @@
                                         class="text-[24px] font-[700] text-center text-[24px] text-[#2C2C73] mb-6">
                                         Add New Task
                                     </h2>
-                                    <form>
+                                    <form method="POST" action="{{ route('create.task') }}">
+                                        @csrf
                                         <div class="mb-4">
-                                            <label
-                                                for="textDetails"
-                                                class="block text-[15px] font-[600] text-[#8D8D8D] mb-1">Task Details</label>
+                                            <!-- Task Details -->
+                                            <label for="textDetails" class="block text-[15px] font-[600] text-[#8D8D8D] mb-1">Task Details</label>
                                             <textarea
                                                 id="taskDetails"
+                                                name="description"
                                                 class="w-full border border-[#E3E3E3] rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 mb-2"
                                                 rows="3"></textarea>
+
+                                            <!-- Assign Members -->
                                             <div class="mb-4">
-                                                <label
-                                                    for="assignMembers"
-                                                    class="block text-[15px] text-[#8D8D8D] font-[600] mb-1"
-                                                    for="search">Assign Members</label>
-                                                <div class="relative hidden lg:block">
-                                                    <input
-                                                        id="assignMembers"
-                                                        class="w-full lg:h-[50px] border border-[#E3E3E3] rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 placeholder:pl-10 placeholder:text-[15px] placeholder:text-[#8D8D8D]"
-                                                        id="search"
-                                                        placeholder="Search here"
-                                                        type="text" />
-                                                    <div
-                                                        class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 pl-2">
-                                                        <svg
-                                                            width="24"
-                                                            height="24"
-                                                            viewBox="0 0 24 24"
-                                                            fill="none"
-                                                            xmlns="http://www.w3.org/2000/svg">
-                                                            <path
-                                                                d="M20 11C20 15.97 15.97 20 11 20C6.03 20 2 15.97 2 11C2 6.03 6.03 2 11 2"
-                                                                stroke="#8D8D8D"
-                                                                stroke-linecap="round"
-                                                                stroke-linejoin="round" />
-                                                            <path
-                                                                d="M18.9304 20.6898C19.4604 22.2898 20.6704 22.4498 21.6004 21.0498C22.4504 19.7698 21.8904 18.7198 20.3504 18.7198C19.2104 18.7098 18.5704 19.5998 18.9304 20.6898Z"
-                                                                stroke="#8D8D8D"
-                                                                stroke-linecap="round"
-                                                                stroke-linejoin="round" />
-                                                            <path
-                                                                d="M14 5H20"
-                                                                stroke="#8D8D8D"
-                                                                stroke-linecap="round"
-                                                                stroke-linejoin="round" />
-                                                            <path
-                                                                d="M14 8H17"
-                                                                stroke="#8D8D8D"
-                                                                stroke-linecap="round"
-                                                                stroke-linejoin="round" />
-                                                        </svg>
+                                                <label class="block text-[15px] text-[#8D8D8D] font-[600] mb-1">Assign Members</label>
+                                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                                    @foreach($members as $member)
+                                                    <div class="flex items-center border border-[#E3E3E3] rounded-lg p-2">
+                                                        <img
+                                                            alt="Profile picture"
+                                                            class="w-12 h-12 mr-2 rounded-full object-cover"
+                                                            src="{{ $member->image_url ?? asset('Assets/images/chatboy.svg') }}" />
+                                                        <div>
+                                                            <p class="font-semibold text-[#000000] text-[14px] font-[600]">{{ $member->name }}</p>
+                                                            <label class="inline-flex items-center mt-1">
+                                                                <input type="checkbox" name="assign_task[]" value="{{ $member->id }}" class="form-checkbox h-4 w-4 text-blue-600">
+                                                                <span class="ml-2 text-sm text-gray-600">Assign</span>
+                                                            </label>
+                                                        </div>
                                                     </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                                            <div
-                                                class="flex items-center border border-[#E3E3E3] rounded-lg p-2">
-                                                <img
-                                                    alt="Profile picture"
-                                                    class="w-12 h-12 mr-2"
-                                                    src="Assets/images/chatboy.svg" />
-                                                <div>
-                                                    <p
-                                                        class="font-semibold text-[#000000] text-[14px] font-[600]">
-                                                        Alex Linderson
-                                                    </p>
-                                                    <button
-                                                        class="bg-[#8B89D9] w-full text-[#FFFFFF] text-[10px] text-center text-[10px] px-4 py-1 rounded-full mt-1">
-                                                        Add Member
-                                                    </button>
-                                                </div>
-                                            </div>
-                                            <div
-                                                class="flex items-center border border-[#E3E3E3] rounded-lg p-2">
-                                                <img
-                                                    alt="Profile picture"
-                                                    class="w-12 h-12 mr-2"
-                                                    src="Assets/images/chatboy.svg" />
-                                                <div>
-                                                    <p
-                                                        class="font-semibold text-[#000000] text-[14px] font-[600]">
-                                                        Alex Linderson
-                                                    </p>
-                                                    <button
-                                                        class="bg-[#8B89D9] w-full text-[#FFFFFF] text-[10px] text-center text-[10px] px-4 py-1 rounded-full mt-1">
-                                                        Add Member
-                                                    </button>
+                                                    @endforeach
                                                 </div>
                                             </div>
                                         </div>
 
+                                        <!-- Submit Buttons -->
                                         <div class="flex justify-between">
                                             <button
                                                 id="closeModalBtnB"
@@ -1557,11 +1501,12 @@
                                             </button>
                                             <button
                                                 class="w-1/2 bg-[#6FD997] text-[#FFFFFF] text-[16px] font-[600] py-2 px-4 rounded-lg focus:outline-none focus:shadow-outline ml-2"
-                                                type="button">
+                                                type="submit">
                                                 Assign
                                             </button>
                                         </div>
                                     </form>
+
                                 </div>
                             </div>
                             <!--  -->

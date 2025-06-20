@@ -410,27 +410,45 @@
                             class="text-[#2C2C73] font-semibold text-[24px] text-center mb-6">
                             Add Album
                         </h1>
+                        <form method="POST" action="{{ route('create.album') }}" enctype="multipart/form-data" class="space-y-6 lg:w-[419px] mx-auto">
+                            @csrf
 
-                        <form class="space-y-6 lg:w-[419px] mx-auto">
+                            <!-- Album Name -->
                             <div>
-                                <label
-                                    for="name"
-                                    class="block mb-2 text-[#8D8D8D] text-[15px] font-semibold">Name</label>
+                                <label for="name" class="block mb-2 text-[#8D8D8D] text-[15px] font-semibold">Name</label>
                                 <input
                                     id="name"
+                                    name="name"
                                     type="text"
+                                    required
                                     class="w-full rounded-lg border border-[#E3E3E3] px-4 py-3 text-base text-[#2e2e6e] placeholder:text-[#a0a0a0] focus:outline-none focus:ring-2 focus:ring-[#8a8a8a]" />
                             </div>
+
+                            <!-- Hidden File Input -->
                             <div>
-                                <label
-                                    for="photos"
-                                    class="block mb-2 text-[#8D8D8D] text-[15px] font-semibold">Add Photos</label>
+                                <label class="block mb-2 text-[#8D8D8D] text-[15px] font-semibold">Add Photos</label>
+
+                                <!-- Hidden file input -->
+                                <input
+                                    type="file"
+                                    name="photos[]"
+                                    id="photos"
+                                    multiple
+                                    class="hidden" />
+
+                                <!-- Custom Upload Button -->
                                 <button
                                     type="button"
+                                    onclick="document.getElementById('photos').click();"
                                     class="w-full bg-[#8B89D9] text-[#FFFFFF] text-[16px] font-semibold rounded-lg py-3">
                                     Upload
                                 </button>
+
+                                <!-- Optional: show selected file names -->
+                                <p id="fileList" class="text-sm text-gray-600 mt-2"></p>
                             </div>
+
+                            <!-- Submit Buttons -->
                             <div class="flex justify-between mt-6 gap-4">
                                 <button
                                     type="button"
@@ -508,135 +526,35 @@
                             <h2 class="text-[16px] text-[#2C2C73] font-bold mb-4">
                                 Your Albums
                             </h2>
-                            <div
-                                class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-[10px] mb-8">
-                                <!-- Album Item -->
-                                <!-- 1 -->
-                                <div
-                                    onclick="openAlbum()"
-                                    class="bg-white cursor-pointer overflow-hidden">
-                                    <img
-                                        alt="Album cover image of a person smiling"
-                                        class="w-full h-48 lg:w-[161px] lg:h-[115px] rounded-[4px] object-cover"
-                                        height="200"
-                                        src="Assets/images/gallery-1.svg"
-                                        width="161" />
-                                    <div class="p-1">
-                                        <h3 class="text-[15px] text-[#8B89D9]">Album Name</h3>
-                                        <p class="text-[#8D8D8D] text-[10px] lg:w-[161px]">
-                                            50 Images &nbsp; 50 Videos &nbsp; 50 Posts
-                                        </p>
-                                    </div>
-                                </div>
-                                <!-- Repeat Album Items -->
-                                <!-- 2 -->
-                                <div class="bg-white overflow-hidden">
-                                    <img
-                                        alt="Album cover image of a person with sunglasses"
-                                        class="w-full h-48 lg:w-[161px] lg:h-[115px] rounded-[4px] object-cover"
-                                        height=""
-                                        src="Assets/images/gallery-2.svg"
-                                        width="" />
-                                    <div class="p-1">
-                                        <h3 class="text-[15px] text-[#8B89D9]">Album Name</h3>
-                                        <p class="text-[#8D8D8D] text-[10px] lg:w-[161px]">
-                                            50 Images &nbsp; 50 Videos &nbsp; 50 Posts
-                                        </p>
-                                    </div>
-                                </div>
-                                <!-- 3 -->
-                                <div class="bg-white overflow-hidden">
-                                    <img
-                                        alt="Album cover image of a person with sunglasses"
-                                        class="w-full h-48 lg:w-[161px] lg:h-[115px] rounded-[4px] object-cover"
-                                        height=""
-                                        src="Assets/images/gallery-1.svg"
-                                        width="" />
-                                    <div class="p-1">
-                                        <h3 class="text-[15px] text-[#8B89D9]">Album Name</h3>
-                                        <p class="text-[#8D8D8D] text-[10px] lg:w-[161px]">
-                                            50 Images &nbsp; 50 Videos &nbsp; 50 Posts
-                                        </p>
-                                    </div>
-                                </div>
-                                <!-- 4 -->
-                                <div class="bg-white overflow-hidden">
-                                    <img
-                                        alt="Album cover image of a person with sunglasses"
-                                        class="w-full h-48 lg:w-[161px] lg:h-[115px] rounded-[4px] object-cover"
-                                        height=""
-                                        src="Assets/images/gallery-2.svg"
-                                        width="" />
-                                    <div class="p-1">
-                                        <h3 class="text-[15px] text-[#8B89D9]">Album Name</h3>
-                                        <p class="text-[#8D8D8D] text-[10px] lg:w-[161px]">
-                                            50 Images &nbsp; 50 Videos &nbsp; 50 Posts
-                                        </p>
-                                    </div>
-                                </div>
-                                <!-- 5 -->
-                                <div class="bg-white overflow-hidden">
-                                    <img
-                                        alt="Album cover image of a person smiling"
-                                        class="w-full h-48 lg:w-[161px] lg:h-[115px] rounded-[4px] object-cover"
-                                        height=""
-                                        src="Assets/images/gallery-3.svg"
-                                        width="" />
-                                    <div class="p-1">
-                                        <h3 class="text-[15px] text-[#8B89D9]">Album Name</h3>
-                                        <p class="text-[#8D8D8D] text-[10px] lg:w-[161px]">
-                                            50 Images &nbsp; 50 Videos &nbsp; 50 Posts
-                                        </p>
-                                    </div>
-                                </div>
-                                <!-- 6 -->
-                                <div class="bg-white overflow-hidden">
-                                    <img
-                                        alt="Album cover image of a person with sunglasses"
-                                        class="w-full h-48 lg:w-[161px] lg:h-[115px] rounded-[4px] object-cover"
-                                        height="200"
-                                        src="Assets/images/gallery-4.svg"
-                                        width="300" />
-                                    <div class="p-1">
-                                        <h3 class="text-[15px] text-[#8B89D9]">Album Name</h3>
-                                        <p class="text-[#8D8D8D] text-[10px] lg:w-[161px]">
-                                            50 Images &nbsp; 50 Videos &nbsp; 50 Posts
-                                        </p>
-                                    </div>
-                                </div>
-                                <!-- 7 -->
-                                <div class="bg-white overflow-hidden">
-                                    <img
-                                        alt="Album cover image of a person with sunglasses"
-                                        class="w-full h-48 lg:w-[161px] lg:h-[115px] rounded-[4px] object-cover"
-                                        height="200"
-                                        src="Assets/images/gallery-3.svg"
-                                        width="300" />
-                                    <div class="p-1">
-                                        <h3 class="text-[15px] text-[#8B89D9]">Album Name</h3>
-                                        <p class="text-[#8D8D8D] text-[10px] lg:w-[161px]">
-                                            50 Images &nbsp; 50 Videos &nbsp; 50 Posts
-                                        </p>
-                                    </div>
-                                </div>
-                                <!-- 8 -->
-                                <div class="bg-white overflow-hidden">
-                                    <img
-                                        alt="Album cover image of a person with sunglasses"
-                                        class="w-full h-48 lg:w-[161px] lg:h-[115px] rounded-[4px] object-cover"
-                                        height=""
-                                        src="Assets/images/gallery-4.svg"
-                                        width="" />
-                                    <div class="p-1">
-                                        <h3 class="text-[15px] text-[#8B89D9]">Album Name</h3>
 
-                                        <p class="text-[#8D8D8D] text-[10px] lg:w-[161px]">
-                                            50 Images &nbsp; 50 Videos &nbsp; 50 Posts
+                            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-[10px] mb-8">
+                                @forelse($albums as $album)
+                                @php
+                                $firstPhoto = $album->photos->first();
+                                $imageUrl = $firstPhoto ? asset('storage/' . $firstPhoto->image_url) : asset('Assets/images/gallery-1.svg');
+                                @endphp
+
+                                <div
+                                    onclick="window.location.href='{{ route('albums.show', $album->id) }}'"
+                                    class="bg-white cursor-pointer overflow-hidden rounded">
+                                    <img
+                                        src="{{ $imageUrl }}"
+                                        class="w-full h-48 lg:h-[115px] object-cover rounded"
+                                        alt="Album cover image" />
+                                    <div class="p-2">
+                                        <h3 class="text-[15px] text-[#8B89D9] font-semibold">{{ $album->name }}</h3>
+                                        <p class="text-[10px] text-[#8D8D8D]">
+                                            {{ $album->photos->count() }} Images &nbsp; 0 Videos &nbsp; 0 Posts
                                         </p>
                                     </div>
                                 </div>
+                                @empty
+                                <p class="text-sm text-gray-500">No albums found.</p>
+                                @endforelse
                             </div>
+
                         </div>
+
                         <div id="shared-list">
                             <h2 class="text-[16px] font-semibold mb-4 text-[#8B89D9]">
                                 Shared Albums
@@ -1039,7 +957,17 @@
                             <div
                                 class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 sm:gap-3 md:gap-4">
                                 <!-- Image Thumbnails -->
+
+                                @php $index = 0; @endphp
+                                @foreach($albums->photos as $photo)
                                 <img
+                                    loading="lazy"
+                                    src="{{ asset('storage/' . $photo->image_url) }}"
+                                    onclick="openLightbox({{ $index }})"
+                                    class="gallery-img w-full aspect-[4/3] lg:h-[156px] rounded-lg object-cover cursor-pointer" />
+                                @php $index++; @endphp
+                                @endforeach
+                                <!-- <img
                                     loading="lazy"
                                     src="Assets/images/album 1.svg"
                                     onclick="openLightbox(0)"
@@ -1048,8 +976,8 @@
                                     loading="lazy"
                                     src="Assets/images/album 2.svg"
                                     onclick="openLightbox(1)"
-                                    class="gallery-img w-full aspect-[4/3] lg:h-[156px] rounded-lg object-cover cursor-pointer" />
-                                <img
+                                    class="gallery-img w-full aspect-[4/3] lg:h-[156px] rounded-lg object-cover cursor-pointer" /> -->
+                                <!-- <img
                                     loading="lazy"
                                     src="Assets/images/album 3.svg"
                                     onclick="openLightbox(2)"
@@ -1093,7 +1021,7 @@
                                     loading="lazy"
                                     src="Assets/images/album 11.svg"
                                     onclick="openLightbox(10)"
-                                    class="gallery-img w-full aspect-[16/9] lg:h-[156px] sm:col-span-2 md:col-span-3 rounded-lg object-cover cursor-pointer" />
+                                    class="gallery-img w-full aspect-[16/9] lg:h-[156px] sm:col-span-2 md:col-span-3 rounded-lg object-cover cursor-pointer" /> -->
                             </div>
                         </div>
                     </div>
@@ -2093,6 +2021,14 @@
             document
                 .querySelectorAll(".notification-container")
                 .forEach(initNotificationComponent);
+        });
+    </script>
+
+    <script>
+        // Optional: show selected file names
+        document.getElementById('photos').addEventListener('change', function() {
+            const files = Array.from(this.files).map(file => file.name).join(', ');
+            document.getElementById('fileList').textContent = files;
         });
     </script>
 </body>

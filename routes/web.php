@@ -9,6 +9,7 @@ use App\Http\Controllers\User\EventController;
 use App\Http\Controllers\User\GiftsController;
 use App\Http\Controllers\User\MemberController;
 use App\Http\Controllers\User\StoreController;
+use App\Http\Controllers\User\TaskController;
 use Illuminate\Support\Facades\Auth;
 
 /*
@@ -38,6 +39,9 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/event', [EventController::class, 'store'])->name('create.event');
     Route::get('/gifts', [GiftsController::class, 'index'])->name('gifts');
     Route::get('/album', [AlbumController::class, 'index'])->name('album');
+    Route::post('/album', [AlbumController::class, 'store'])->name('create.album');
+    Route::get('/albums/{id}', [AlbumController::class, 'show'])->name('albums.show');;
     Route::get('/store', [StoreController::class, 'index'])->name('store');
     Route::get('/chat', [ChatController::class, 'index'])->name('chat');
+    Route::post('/task', [TaskController::class, 'store'])->name('create.task');
 });
