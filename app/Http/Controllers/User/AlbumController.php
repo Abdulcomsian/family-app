@@ -4,6 +4,7 @@ namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
 use App\Models\Album;
+use App\Models\Member;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -12,14 +13,26 @@ class AlbumController extends Controller
     public function index()
     {
 
-        $albums = Album::with('photos')->get();
-        return view('album.index', compact('albums'));
+        $albums = Album::with('coverPhoto')->get();
+        // dd($albums);
+        $members = Member::where('user_id', auth()->id())->latest()->get();
+        return view('album.index', [
+            'albums' => $albums,
+            'members' => $members,
+            'isSingleView' => false
+        ]);
     }
 
     public function show($id)
     {
-        $albums = Album::with('photos')->findOrFail($id);
-        return view('album.index', compact('albums'));
+        $album = Album::with('photos')->findOrFail($id);
+        $members = Member::where('user_id', auth()->id())->latest()->get();
+
+        return view('album.index', [
+            'album' => $album,
+            'members' => $members,
+            'isSingleView' => true
+        ]);
     }
 
 

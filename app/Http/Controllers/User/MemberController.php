@@ -32,7 +32,7 @@ class MemberController extends Controller
     public function index()
     {
         $members = Member::where('user_id', Auth::id())->latest()->get();
-        dd($members);
+        // dd($members);
         return view('home', compact('members'));
     }
 }

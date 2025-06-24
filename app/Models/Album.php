@@ -8,14 +8,23 @@ use Illuminate\Database\Eloquent\Model;
 class Album extends Model
 {
     use HasFactory;
- protected $fillable = [
+    protected $fillable = [
         'user_id',
         'name'
     ];
 
 
     public function photos()
-{
-    return $this->hasMany(Photo::class);
-}
+    {
+        return $this->hasMany(Photo::class);
+    }
+
+    public function getCoverAttribute()
+    {
+        return $this->photos->first();
+    }
+    public function coverPhoto()
+    {
+        return $this->hasOne(Photo::class);
+    }
 }
