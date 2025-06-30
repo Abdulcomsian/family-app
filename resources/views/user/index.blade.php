@@ -600,7 +600,7 @@
     </div>
 </div>
 @endsection
-@section("scripts")
+@push("scripts")
 <script>
     // Open modal when "Create Post" button is clicked
     document
@@ -884,4 +884,4 @@
             .forEach(initNotificationComponent);
     });
 </script>
-@endsection
+@endpush

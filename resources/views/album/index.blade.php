@@ -13,6 +13,8 @@
             <div
                 class="flex space-x-2 mt-4 flex-col items-center justify-center gap-4 md:gap-1 md:flex-row md:items-start md:justify-start">
                 <!-- ٓAdd Album -->
+                @if(!$isSingleView)
+
                 <button
                     id="openModalBtn"
                     class="flex items-center space-x-2 py-2 px-3 bg-[#FFBB0033] rounded-md w-[194px] h-[40px]">
@@ -22,12 +24,14 @@
                         Create new album
                     </span>
                 </button>
+                @endif
+
 
                 <!-- Add Photo -->
                 <button
                     id="openPhotosModalBtn"
                     class="flex items-center space-x-2 py-2 px-2 bg-[#009DFF33] rounded-md w-[194px] h-[40px]">
-                    <img src="Assets/images/video-play.svg" class="" />
+                    <img src="{{asset('assets/images/video-play.svg')}} " class="" />
                     <span
                         class="text-[#009DFF] text-[13px] leading-[17.7px] lg:font-semibold">
                         Add pictures to album
@@ -129,26 +133,32 @@
                     Add Photos
                 </h2>
 
-                <form class="space-y-4 lg:w-[419px] mx-auto">
+                <form method="POST" action="{{ route('add.picture') }}" enctype="multipart/form-data" class="space-y-4 lg:w-[419px] mx-auto">
+                    @csrf
+
+                    <!-- Album ID (can be dynamic) -->
+                    <input type="hidden" name="album_id" value="{{ $album->id ?? 1 }}">
+
+                    <!-- Upload Input -->
                     <div>
-                        <label
-                            for="caption"
-                            class="block mb-2 text-[#8D8D8D] text-[15px] font-semibold">Caption</label>
-                        <textarea
-                            id="caption"
-                            rows="5"
-                            class="w-full rounded-lg border border-[#E3E3E3] text-gray-900 text-[14px] font-normal p-3 resize-none focus:outline-none focus:ring-2 focus:ring-indigo-400"></textarea>
+                        <label for="photos" class="block mb-2 text-[#8D8D8D] text-[15px] font-semibold">Add Photos</label>
+
+                        <input
+                            type="file"
+                            name="image_url[]"
+                            id="photos"
+                            multiple
+                            accept="image/*"
+                            class="block w-full text-sm text-gray-500
+                   file:mr-4 file:py-2 file:px-4
+                   file:rounded-lg file:border-0
+                   file:text-sm file:font-semibold
+                   file:bg-[#8B89D9] file:text-white
+                   hover:file:bg-indigo-600"
+                            required>
                     </div>
-                    <div>
-                        <label
-                            for="photos"
-                            class="block mb-2 text-[#8D8D8D] text-[15px] font-semibold">Add Photos</label>
-                        <button
-                            type="button"
-                            class="w-full bg-[#8B89D9] text-[#FFFFFF] text-[16px] font-semibold rounded-lg py-3">
-                            Upload
-                        </button>
-                    </div>
+
+                    <!-- Buttons -->
                     <div class="flex justify-between mt-6 gap-4">
                         <button
                             type="button"
@@ -159,7 +169,7 @@
 
                         <button
                             type="submit"
-                            class="flex-1 bg-[#6FD997] text-[#FFFFFF] text-[16px] font-semibold rounded-lg py-3">
+                            class="flex-1 bg-[#6FD997] text-white text-[16px] font-semibold rounded-lg py-3">
                             Add
                         </button>
                     </div>
@@ -169,55 +179,135 @@
         <!-- Posts -->
         <div class="bg-white mb-4 p-4">
             <div class="mx-auto">
-                <!-- <div id="album-list">
-                    <h2 class="text-[16px] text-[#2C2C73] font-bold mb-4">
-                        Your Albums
-                    </h2>
-                    <div
-                        class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-[10px] mb-8">
-                      
-                        <div
-                            onclick="openAlbum()"
-                            class="bg-white cursor-pointer overflow-hidden">
-                            <img
-                                alt="Album cover image of a person smiling"
-                                class="w-full h-48 lg:w-[161px] lg:h-[115px] rounded-[4px] object-cover"
-                                height="200"
-                                src="Assets/images/gallery-1.svg"
-                                width="161" />
-                            <div class="p-1">
-                                <h3 class="text-[15px] text-[#8B89D9]">Album Name</h3>
-                                <p class="text-[#8D8D8D] text-[10px] lg:w-[161px]">
-                                    50 Images &nbsp; 50 Videos &nbsp; 50 Posts
-                                </p>
-                            </div>
-                        </div>
-
-                    </div>
-                </div> -->
 
 
                 {{-- All Albums List --}}
                 @if(!$isSingleView)
-                <div id="album-list">
-                    <h2 class="text-[16px] text-[#2C2C73] font-bold mb-4">Your Albums</h2>
-                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-[10px] mb-8">
-                        @foreach($albums as $album)
-                        <a href="{{ route('albums.show', $album->id) }}">
-                            <div class="bg-white cursor-pointer overflow-hidden">
-                                <img
-                                    src="{{ $album->coverPhoto ? asset('storage/' . $album->coverPhoto->image_url) : asset('Assets/images/gallery-1.svg') }}"
-                                    class="w-full h-48 lg:w-[161px] lg:h-[115px] rounded-[4px] object-cover"
-                                    alt="Album Cover" />
-                                <div class="p-1">
-                                    <h3 class="text-[15px] text-[#8B89D9]">{{ $album->name }}</h3>
-                                    <p class="text-[#8D8D8D] text-[10px] lg:w-[161px]">
-                                        {{ $album->photos->count() }} Images
-                                    </p>
-                                </div>
+                <div class=" bg-white mb-4 p-4">
+                    <div class="mx-auto">
+                        <div id="album-list">
+                            <h2 class="text-[16px] text-[#2C2C73] font-bold mb-4">Your Albums</h2>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-[10px] mb-8">
+                                @foreach($albums as $album)
+                                <a href="{{ route('albums.show', $album->id) }}">
+                                    <div class="bg-white cursor-pointer overflow-hidden">
+                                        <img
+                                            src="{{ $album->coverPhoto ? asset('storage/' . $album->coverPhoto->image_url) : asset('Assets/images/gallery-1.svg') }}"
+                                            class="w-full h-48 lg:w-[161px] lg:h-[115px] rounded-[4px] object-cover"
+                                            alt="Album Cover" />
+                                        <div class="p-1">
+                                            <h3 class="text-[15px] text-[#8B89D9]">{{ $album->name }}</h3>
+                                            <p class="text-[#8D8D8D] text-[10px] lg:w-[161px]">
+                                                {{ $album->photos->count() }} Images
+                                            </p>
+                                        </div>
+                                    </div>
+                                </a>
+                                @endforeach
                             </div>
-                        </a>
-                        @endforeach
+                        </div>
+                        <div id="shared-list">
+                            <h2 class="text-[16px] font-semibold mb-4 text-[#8B89D9]">
+                                Shared Albums
+                            </h2>
+                            <div
+                                class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-[10px]">
+                                <div
+                                    onclick="openAlbum()"
+                                    class="bg-white overflow-hidden cursor-pointer">
+                                    <img
+                                        alt="Album cover image of a person smiling"
+                                        class="w-full h-48 lg:w-[161px] lg:h-[115px] rounded-[4px] object-cover"
+                                        height="200"
+                                        src="Assets/images/gallery-1.svg"
+                                        width="300" />
+                                    <div class="p-1">
+                                        <div class="flex flex-row justify-between">
+                                            <div>
+                                                <h3 class="text-[15px] text-[#8B89D9]">Album Name</h3>
+                                            </div>
+                                            <div class="flex items-center justify-center">
+                                                <img
+                                                    alt="Profile image of a person"
+                                                    class="w-[16px] h-[16px] rounded-full border-2 border-white -ml-2"
+                                                    height=""
+                                                    src="https://storage.googleapis.com/a1aa/image/lcONfmLvMux3xvZZEmqyEa4nPbduQlq0-FoW1pEUkNI.jpg"
+                                                    width="" />
+                                                <img
+                                                    alt="Profile image of a person"
+                                                    class="h-[16px] w-[16px] rounded-full border-2 border-white -ml-2"
+                                                    height="30"
+                                                    src="https://storage.googleapis.com/a1aa/image/lcONfmLvMux3xvZZEmqyEa4nPbduQlq0-FoW1pEUkNI.jpg"
+                                                    width="" />
+                                                <img
+                                                    alt="Profile image of a person"
+                                                    class="h-[16px] w-[16px] rounded-full border-2 border-white -ml-2"
+                                                    height="30"
+                                                    src="https://storage.googleapis.com/a1aa/image/lcONfmLvMux3xvZZEmqyEa4nPbduQlq0-FoW1pEUkNI.jpg"
+                                                    width="30" />
+                                                <img
+                                                    alt="Profile image of a person"
+                                                    class="h-[16px] w-[16px] rounded-full border-2 border-white -ml-2"
+                                                    height="30"
+                                                    src="https://storage.googleapis.com/a1aa/image/lcONfmLvMux3xvZZEmqyEa4nPbduQlq0-FoW1pEUkNI.jpg"
+                                                    width="30" />
+                                            </div>
+                                        </div>
+
+                                        <p class="text-[#8D8D8D] text-[10px] lg:w-[161px]">
+                                            50 Images &nbsp; 50 Videos &nbsp; 50 Posts
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <div class="bg-white overflow-hidden">
+                                    <img
+                                        alt="Album cover image of a person smiling"
+                                        class="w-full h-48 lg:w-[161px] lg:h-[115px] rounded-[4px] object-cover"
+                                        height="200"
+                                        src="Assets/images/gallery-2.svg"
+                                        width="300" />
+                                    <div class="p-1">
+                                        <div class="flex flex-row justify-between">
+                                            <div>
+                                                <h3 class="text-[15px] text-[#8B89D9]">Album Name</h3>
+                                            </div>
+                                            <div class="flex items-center justify-center">
+                                                <img
+                                                    alt="Profile image of a person"
+                                                    class="w-[16px] h-[16px] rounded-full border-2 border-white -ml-2"
+                                                    height=""
+                                                    src="https://storage.googleapis.com/a1aa/image/lcONfmLvMux3xvZZEmqyEa4nPbduQlq0-FoW1pEUkNI.jpg"
+                                                    width="" />
+                                                <img
+                                                    alt="Profile image of a person"
+                                                    class="h-[16px] w-[16px] rounded-full border-2 border-white -ml-2"
+                                                    height="30"
+                                                    src="https://storage.googleapis.com/a1aa/image/lcONfmLvMux3xvZZEmqyEa4nPbduQlq0-FoW1pEUkNI.jpg"
+                                                    width="" />
+                                                <img
+                                                    alt="Profile image of a person"
+                                                    class="h-[16px] w-[16px] rounded-full border-2 border-white -ml-2"
+                                                    height="30"
+                                                    src="https://storage.googleapis.com/a1aa/image/lcONfmLvMux3xvZZEmqyEa4nPbduQlq0-FoW1pEUkNI.jpg"
+                                                    width="30" />
+                                                <img
+                                                    alt="Profile image of a person"
+                                                    class="h-[16px] w-[16px] rounded-full border-2 border-white -ml-2"
+                                                    height="30"
+                                                    src="https://storage.googleapis.com/a1aa/image/lcONfmLvMux3xvZZEmqyEa4nPbduQlq0-FoW1pEUkNI.jpg"
+                                                    width="30" />
+                                            </div>
+                                        </div>
+
+                                        <p class="text-[#8D8D8D] text-[10px] lg:w-[161px]">
+                                            50 Images &nbsp; 50 Videos &nbsp; 50 Posts
+                                        </p>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
                     </div>
                 </div>
                 @endif
@@ -246,7 +336,7 @@
                 </div>
                 @endif
 
-                <div id="shared-list">
+                {{-- <div id="shared-list">
                     <h2 class="text-[16px] font-semibold mb-4 text-[#8B89D9]">
                         Shared Albums
                     </h2>
@@ -622,96 +712,73 @@
                             </div>
                         </div>
                     </div>
-                </div>
+                </div> --}}
             </div>
-            <!-- hjkhjkhjkhjkhjkhjkhjkhjkhjkhkjhkjhkj -->
-            <!-- Album Gallery View -->
-            <!-- <div id="album-gallery" class="hidden bg-white mb-4 text-gray-800">
-                <div class="max-w-[706px] mx-auto p-4">
-                    <div class="flex flex-row space-x-2 mb-4">
-                        <button
-                            onclick="goBack()"
-                            class="text-[#2C2C73] text-[16px] font-semibold gap-2 flex flex-row">
-                            <span>
-                                <img
-                                    src="Assets/images/arrow-left.svg"
-                                    alt=""
-                                    srcset="" />
-                            </span>
-                            <span class="text-[16px]">Albums Name</span>
-                        </button>
-                    </div>
-
-                    <div
-                        class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 sm:gap-3 md:gap-4">
-                        <img
-                            loading="lazy"
-                            src="Assets/images/album 1.svg"
-                            onclick="openLightbox(0)"
-                            class="gallery-img w-full aspect-[4/3] lg:h-[156px] rounded-lg object-cover cursor-pointer" />
-                        <img
-                            loading="lazy"
-                            src="Assets/images/album 2.svg"
-                            onclick="openLightbox(1)"
-                            class="gallery-img w-full aspect-[4/3] lg:h-[156px] rounded-lg object-cover cursor-pointer" />
-
-                    </div>
-                </div>
-            </div> -->
-
 
             <!-- Lightbox Modal -->
             <div
                 id="lightbox"
                 class="fixed inset-0 bg-black bg-opacity-60 flex flex-col justify-center items-center z-50 hidden opacity-0 transition-opacity duration-300">
+
                 <div class="relative w-full h-[460px] lg:w-[864px] lg:h-[464px]">
+
+                    <!-- Close Button -->
                     <button
                         id="closeLightbox"
+                        onclick="closeModal()"
                         class="absolute top-0 lg:-top-[11%] xl:-top-[9%] right-0 lg:-right-[4%] text-white text-3xl z-50">
-                        <!-- &times; -->
                         <img
-                            src="Assets/images/close-circle.svg"
-                            alt=""
-                            srcset=""
+                            src="{{asset('assets/images/close-circle.svg')}}"
+                            alt="Close"
                             class="max-w-[36px] lg:max-w-[36px]" />
                     </button>
+
+                    <!-- Main Image -->
                     <img
                         id="lightboxImage"
                         src=""
                         class="h-full w-full object-cover rounded-xl shadow-lg overflow-hidden transition-opacity duration-300" />
 
+                    <!-- Caption Box -->
                     <div
                         id="captionBox"
                         class="relative -mt-24 border-t border-black/10 absolute rounded-xl backdrop-blur-sm bg-black/10 w-full h-[97px] lg:w-[842px] lg:pb-[19px] pt-4">
+
                         <span id="imageCaption" class="text-white text-sm lg:pl-4">Image caption goes here</span>
+
+                        <!-- Close Caption Button -->
                         <button
                             onclick="closeCaption()"
                             class="absolute top-1 right-2 text-white text-xl">
-                            <!-- &times; -->
                             <img
                                 src="Assets/images/close-circle.svg"
-                                alt=""
-                                srcset=""
+                                alt="Close caption"
                                 class="max-w-[20px] lg:max-w-[30px]" />
                         </button>
                     </div>
+
+                    <!-- Thumbnails Container -->
                     <div
                         class="flex mt-4 gap-2 overflow-x-auto max-w-full px-4"
                         id="thumbnailContainer"></div>
+
+                    <!-- Left Arrow -->
                     <div
                         class="absolute left-2 lg:-left-[8%] top-1/2 transform -translate-y-1/2 cursor-pointer z-50 max-w-[30px] lg:max-w-[50px]"
                         onclick="prevImage()">
-                        <!-- &#10094; -->
-                        <img src="Assets/images/blue arrow left.svg" alt="" />
+                        <img src="Assets/images/blue arrow left.svg" alt="Previous" />
                     </div>
+
+                    <!-- Right Arrow -->
                     <div
                         class="absolute right-2 lg:-right-[5%] top-1/2 transform -translate-y-1/2 cursor-pointer z-50 max-w-[30px] lg:max-w-[50px]"
                         onclick="nextImage()">
-                        <!-- &#10095; -->
-                        <img src="Assets/images/blue arrow right.svg" alt="" />
+                        <img src="Assets/images/blue arrow right.svg" alt="Next" />
                     </div>
+
                 </div>
             </div>
+
 
             <!-- Modal -->
             <div
@@ -737,140 +804,140 @@
                 <span class="font-bold text-lg text-[#2C2C73]">
                     Upcoming Event
                 </span>
-                <a class="text-[#8D8D8D] text-[13px]" href="#"> See All </a>
+                <!-- <a class="text-[#8D8D8D] text-[13px]" href="#"> See All </a> -->
             </div>
             <img
                 alt="Event Image"
                 class="w-full rounded-lg mb-2"
                 height="150"
-                src="Assets/images/Rectangle 110662.svg"
+                src="{{ $event[0]->image_url ? asset($event[0]->image_url) : asset('assets/images/Rectangle 110662.svg') }}"
                 width="300" />
             <div class="flex flex-row gap-2 items-center pt-2">
                 <div
                     class="flex flex-col items-center py-1 px-2 rounded-lg shadow-md w-[40px] h-[40px]">
-                    <span class="text-gray-600 text-[14px] font-bold"> 17 </span>
-                    <span class="text-[10px]">Jun</span>
+                    <span class="text-gray-600 text-[14px] font-bold"> {{ \Carbon\Carbon::parse($event[0]->date)->format('d') ?? '' }} </span>
+                    <span class="text-[10px]">{{ \Carbon\Carbon::parse($event[0]->date)->format('M') ?? '' }}
+                    </span>
                 </div>
                 <div class="flex flex-col">
                     <p class="font-semibold text-[13px] text-[#8D8D8D]">
-                        Event Name
+                        {{-- Event Name --}}
+                        {{$event[0]->name ?? ""}}
                     </p>
-                    <p class="text-[#8D8D8D] text-[13px]">Location</p>
+                    <p class="text-[#8D8D8D] text-[13px]"> {{$event[0]->category ?? ""}}</p>
                 </div>
             </div>
         </div>
         <!-- My Tasks -->
-        <div class="bg-white p-4 mb-4">
+
+        <!-- <div class="bg-white p-4 mb-4">
             <span class="font-bold text-[#2C2C73] text-[15px]"> My Tasks </span>
             <div class="mt-2">
-                <span class="text-[#8B89D9] text-[12px] pt-1">08:00 AM - 09:00 AM</span>
-                <div
-                    class="flex items-center mb-2 bg-[#FAFAFA] border border-[#E3E3E3] pl-2 py-2 rounded-xl">
+                @forelse($task as $item)
+                <span class="text-[#8B89D9] text-[12px] pt-1">
+                    {{ \Carbon\Carbon::parse($item->created_at)->format('h:i A') }} -
+                    {{ \Carbon\Carbon::parse($item->created_at)->addHour()->format('h:i A') }}
+                </span>
+                <div class="flex items-center mb-2 bg-[#FAFAFA] border border-[#E3E3E3] pl-2 py-2 rounded-xl">
                     <div
                         class="bg-[#70D997] w-[50px] h-[48px] flex flex-col items-center text-green-600 rounded-lg p-2"
                         style="font-family: Poppins, sans-serif">
                         <span class="text-[14px] font-bold text-[#FFFFFFD4]">
-                            17
+                            {{ \Carbon\Carbon::parse($item->created_at)->format('d') }}
                         </span>
-                        <span class="text-[10px] text-[#FFFFFFD4]">Jun</span>
+                        <span class="text-[10px] text-[#FFFFFFD4]">
+                            {{ \Carbon\Carbon::parse($item->created_at)->format('M') }}
+                        </span>
                     </div>
                     <span class="px-3">
-                        <svg
-                            width="5"
-                            height="26"
-                            viewBox="0 0 5 26"
-                            fill="none"
-                            xmlns="http://www.w3.org/2000/svg">
-                            <rect
-                                x="1.57812"
-                                y="2.36377"
-                                width="1.57576"
-                                height="23.6364"
-                                rx="0.787879"
-                                fill="url(#paint0_linear_6232_3649)"
-                                fill-opacity="0.7" />
-                            <circle
-                                cx="2.36364"
-                                cy="2.36364"
-                                r="2.36364"
-                                fill="#2C2C73" />
+                        <svg width="5" height="26" viewBox="0 0 5 26" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <rect x="1.57812" y="2.36377" width="1.57576" height="23.6364" rx="0.787879"
+                                fill="url(#paint0_linear_6232_3649)" fill-opacity="0.7" />
+                            <circle cx="2.36364" cy="2.36364" r="2.36364" fill="#2C2C73" />
                             <defs>
-                                <linearGradient
-                                    id="paint0_linear_6232_3649"
-                                    x1="2.366"
-                                    y1="2.36377"
-                                    x2="2.366"
-                                    y2="26.0001"
-                                    gradientUnits="userSpaceOnUse">
+                                <linearGradient id="paint0_linear_6232_3649" x1="2.366" y1="2.36377" x2="2.366"
+                                    y2="26.0001" gradientUnits="userSpaceOnUse">
                                     <stop stop-color="#7D72FC" />
-                                    <stop
-                                        offset="1"
-                                        stop-color="#7D72FC"
-                                        stop-opacity="0" />
+                                    <stop offset="1" stop-color="#7D72FC" stop-opacity="0" />
                                 </linearGradient>
                             </defs>
                         </svg>
                     </span>
                     <div>
-                        <p class="text-[14px] text-[#8B89D9]">Name</p>
-                        <p class="text-[#8D8D8D] text-[12px]">Bring Dinner Meal</p>
+                        <p class="text-[14px] text-[#8B89D9]">Name
+                        </p>
+                        <p class="text-[#8D8D8D] text-[12px]">{{ $item->description }}</p>
                     </div>
                 </div>
+                @empty
+                <p class="text-sm text-gray-500">No tasks available.</p>
+                @endforelse
+            </div>
+        </div> -->
 
-                <span class="text-[#8B89D9] text-[12px] pt-1">08:00 AM - 09:00 AM</span>
-                <div
-                    class="flex items-center mb-2 bg-[#FAFAFA] border border-[#E3E3E3] pl-2 py-2 rounded-xl">
-                    <div
-                        class="bg-[#70D997] w-[50px] h-[48px] flex flex-col items-center text-green-600 rounded-lg p-2">
+
+        <div class="bg-white p-4 mb-4">
+            <span class="font-bold text-[#2C2C73] text-[15px]"> My Tasks </span>
+
+            <div class="mt-2">
+                @forelse($task as $item)
+                {{-- Time Range --}}
+                <span class="text-[#8B89D9] text-[12px] pt-1">
+                    {{ \Carbon\Carbon::parse($item->created_at)->format('h:i A') }} -
+                    {{ \Carbon\Carbon::parse($item->created_at)->addHour()->format('h:i A') }}
+                </span>
+
+                {{-- Task Block --}}
+                <div class="flex items-center mb-2 bg-[#FAFAFA] border border-[#E3E3E3] pl-2 py-2 rounded-xl">
+
+                    {{-- Date Box --}}
+                    <div class="bg-[#70D997] w-[50px] h-[48px] flex flex-col items-center text-green-600 rounded-lg p-2" style="font-family: Poppins, sans-serif">
                         <span class="text-[14px] font-bold text-[#FFFFFFD4]">
-                            17
+                            {{ \Carbon\Carbon::parse($item->created_at)->format('d') }}
                         </span>
-                        <span class="text-[10px] text-[#FFFFFFD4]">Jun</span>
+                        <span class="text-[10px] text-[#FFFFFFD4]">
+                            {{ \Carbon\Carbon::parse($item->created_at)->format('M') }}
+                        </span>
                     </div>
+
+                    {{-- Vertical Line Icon --}}
                     <span class="px-3">
-                        <svg
-                            width="5"
-                            height="26"
-                            viewBox="0 0 5 26"
-                            fill="none"
-                            xmlns="http://www.w3.org/2000/svg">
-                            <rect
-                                x="1.57812"
-                                y="2.36377"
-                                width="1.57576"
-                                height="23.6364"
-                                rx="0.787879"
-                                fill="url(#paint0_linear_6232_3649)"
-                                fill-opacity="0.7" />
-                            <circle
-                                cx="2.36364"
-                                cy="2.36364"
-                                r="2.36364"
-                                fill="#2C2C73" />
+                        <svg width="5" height="26" viewBox="0 0 5 26" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <rect x="1.57812" y="2.36377" width="1.57576" height="23.6364" rx="0.787879"
+                                fill="url(#paint0_linear_6232_3649)" fill-opacity="0.7" />
+                            <circle cx="2.36364" cy="2.36364" r="2.36364" fill="#2C2C73" />
                             <defs>
-                                <linearGradient
-                                    id="paint0_linear_6232_3649"
-                                    x1="2.366"
-                                    y1="2.36377"
-                                    x2="2.366"
-                                    y2="26.0001"
-                                    gradientUnits="userSpaceOnUse">
+                                <linearGradient id="paint0_linear_6232_3649" x1="2.366" y1="2.36377" x2="2.366"
+                                    y2="26.0001" gradientUnits="userSpaceOnUse">
                                     <stop stop-color="#7D72FC" />
-                                    <stop
-                                        offset="1"
-                                        stop-color="#7D72FC"
-                                        stop-opacity="0" />
+                                    <stop offset="1" stop-color="#7D72FC" stop-opacity="0" />
                                 </linearGradient>
                             </defs>
                         </svg>
                     </span>
+
+                    {{-- Task Info --}}
                     <div>
-                        <p class="text-[14px] text-[#8B89D9]">Name</p>
-                        <p class="text-[#8D8D8D] text-[12px]">Lorem ipsum dolor</p>
+                        {{-- Member Name(s) --}}
+                        <p class="text-[14px] text-[#8B89D9] font-medium">
+                            @foreach ($item->members as $member)
+                            {{ $member->name }}@if(!$loop->last), @endif
+                            @endforeach
+                        </p>
+
+                        {{-- Task Description --}}
+                        <p class="text-[#8D8D8D] text-[12px]">
+                            {{ $item->description }}
+                        </p>
                     </div>
                 </div>
+                @empty
+                <p class="text-sm text-gray-500">No tasks available.</p>
+                @endforelse
             </div>
         </div>
+
+
         <!-- Chats -->
         <div class="bg-white p-4 rounded-lg xl:sticky">
             <div class="flex justify-between items-center mb-4">
@@ -996,7 +1063,7 @@
 
 
 
-@section("scripts")
+@push("scripts")
 <script>
     // for side bar popup //
     const body = document.body;
@@ -1248,6 +1315,7 @@
         setTimeout(() => lightbox.classList.remove("opacity-0"), 10);
     }
 
+
     function closeModal() {
         lightbox.classList.add("opacity-0");
         setTimeout(() => lightbox.classList.add("hidden"), 300);
@@ -1457,6 +1525,6 @@
         document.getElementById('fileList').textContent = files;
     });
 </script>
-@endsection
+@endpush
 
 <!-- uytyutiuiohioji -->

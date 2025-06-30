@@ -19,6 +19,7 @@ class Event extends Model
         'owner',
         'description',
         'invite_clique',
+        'image_url'
     ];
 
     public function members()

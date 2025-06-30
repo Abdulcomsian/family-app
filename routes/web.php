@@ -40,7 +40,8 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/gifts', [GiftsController::class, 'index'])->name('gifts');
     Route::get('/album', [AlbumController::class, 'index'])->name('album');
     Route::post('/album', [AlbumController::class, 'store'])->name('create.album');
-    Route::get('/albums/{id}', [AlbumController::class, 'show'])->name('albums.show');;
+    Route::get('/albums/{id}', [AlbumController::class, 'show'])->name('albums.show');
+    Route::post('/albums', [AlbumController::class, 'addImages'])->name('add.picture');
     Route::get('/store', [StoreController::class, 'index'])->name('store');
     Route::get('/chat', [ChatController::class, 'index'])->name('chat');
     Route::post('/task', [TaskController::class, 'store'])->name('create.task');

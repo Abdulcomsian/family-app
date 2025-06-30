@@ -51,7 +51,7 @@
         @yield("content")
     </div>
     <!-- @include("partials.scripts") -->
-    @yield("scripts")
+    @stack("scripts")
 </body>
 
 </html>
